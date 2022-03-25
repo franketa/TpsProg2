@@ -1,8 +1,9 @@
 unit TADEstacionamiento;
 
 interface
-Uses
-  SysUtils;
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 type
 
@@ -13,7 +14,7 @@ type
 
   autoIngresado = object
   
-    patente : integer;
+    patente : string;
     horarioEntrada : horario;
     horarioSalida : horario;
   end;
@@ -22,22 +23,68 @@ type
   private
     Autos : array of AutoIngresado;
     cantidadAutos:integer;
-    function buscarAuto(pat:integer):integer;
-    function getCantidadAutos():integer;
+    tarifaPorHora:integer;
+    function buscarAuto(pat:string):integer;
   public
-    procedure addAuto(pat:integer;horaEntrada, horaSalida:horario);
-    function getTarifaAutoDado(pat:integer):string;
+    procedure setTarifaPorHora(tarifa:integer);
+    function getTarifaPorHora:integer;
+    procedure addAuto(pat:string;horaEntrada, horaSalida:horario);
+    function getTarifaAuto(indiceAuto:integer):string;
+    procedure mostrarDatosAuto(memo:Tmemo;pat:string);
+    procedure mostrarDatosTodosLosAutos(memo:Tmemo);
   end;
 
 implementation
 
-function Estacionamiento.getCantidadAutos():integer;
+procedure Estacionamiento.mostrarDatosTodosLosAutos(memo:Tmemo);
+var
+i:integer;
 begin
-  result := cantidadAutos;
+  memo.Lines.Clear;
+  if cantidadAutos = 0 then begin
+    memo.Lines.Add('No hay autos para mostar');
+    exit;
+  end
+  else begin
+    for i := 0 to CantidadAutos -1 do begin
+      memo.Lines.Add('Patente: '+ autos[i].patente);
+      memo.Lines.Add('Horario de entrada: '+ autos[i].patente);
+      memo.Lines.Add('Horario de salida: '+ autos[i].patente);
+      memo.Lines.Add('Tarifa a pagar: '+ getTarifaAuto(i));
+    end;
+  end;
+
+ end;
+
+procedure Estacionamiento.mostrarDatosAuto(memo:Tmemo;pat:string);
+var
+  indiceAuto:integer;
+begin
+  indiceAuto := buscarAuto(pat);
+  if indiceAuto = -1 then begin
+    memo.Lines.Add( 'El auto no está registrado');
+    exit;
+  end;
+  memo.Lines.Add('Patente: '+ autos[indiceAuto].patente);
+  memo.Lines.Add('Horario de entrada: '+ autos[indiceAuto].patente);
+  memo.Lines.Add('Horario de salida: '+ autos[indiceAuto].patente);
+  memo.Lines.Add('Tarifa a pagar: '+ getTarifaAuto(indiceAuto));
 end;
 
+procedure Estacionamiento.setTarifaPorHora(tarifa:integer);
+begin
+  if tarifa < 0 then tarifaPorHora := -1
+  else begin
+   tarifaPorHora := tarifa;
+  end;
+end;
 
-function Estacionamiento.buscarAuto(pat:integer):integer;
+function Estacionamiento.getTarifaPorHora:integer;
+ begin
+   result := tarifaPorHora;
+ end;
+
+function Estacionamiento.buscarAuto(pat:string):integer;
 var
   i,aux:integer;
 begin
@@ -49,19 +96,13 @@ begin
   result := aux;
 end;
 
-function Estacionamiento.getTarifaAutoDado(pat:integer):string;
+function Estacionamiento.getTarifaAuto(indiceAuto:integer):string;
 var
   cantHoras:horario;
-  indiceAuto, auxHorasEnMinutosEntrada, auxHorasEnMinutosSalida, auxMinutos:integer;  
+  auxHorasEnMinutosEntrada, auxHorasEnMinutosSalida, auxMinutos:integer;
 begin
 
-  indiceAuto := buscarAuto(pat);
-  if indiceAuto = -1 then begin
-    result := 'El auto no está registrado';
-    exit;
-  end;
-
-  if (autos[indiceAuto].horarioEntrada.horas = autos[indiceAuto].horarioSalida.horas) and
+   if (autos[indiceAuto].horarioEntrada.horas = autos[indiceAuto].horarioSalida.horas) and
      (autos[indiceAuto].horarioEntrada.minutos = autos[indiceAuto].horarioSalida.minutos) then begin
        result := 'El auto no registra horas de estacionamiento';
        exit;
@@ -80,15 +121,17 @@ begin
     cantHoras.minutos := autos[indiceAuto].horarioSalida.minutos - autos[indiceAuto].horarioEntrada.minutos;
 
   if cantHoras.horas > 6 then
-    result := 'Paga tarifa completa'
+    result := 'tarifa completa'
   else if cantHoras.horas > 3 then
-    result := 'Paga media estadía'
-  else
-    result := 'Paga ' + cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos.' ;
+    result := 'media estadía'
+  else begin
+    //PODRIA SER calculo el total a pagar en base a la tarifa por hora
 
+    result := cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos.' ;
   end;
+end;
 
-procedure Estacionamiento.addAuto(pat:integer;horaEntrada, horaSalida:horario);
+procedure Estacionamiento.addAuto(pat:string;horaEntrada, horaSalida:horario);
 begin
   if length(autos) = 0 then begin
     setlength(Autos,1);
