@@ -23,19 +23,17 @@ type
     Autos : array of AutoIngresado;
     cantidadAutos:integer;
     function buscarAuto(pat:integer):integer;
-    procedure getCantidadAutos();
+    function getCantidadAutos():integer;
   public
     procedure addAuto(pat:integer;horaEntrada, horaSalida:horario);
     function getTarifaAutoDado(pat:integer):string;
   end;
 
 implementation
-procedure Estacionamiento.getCantidadAutos();
+
+function Estacionamiento.getCantidadAutos():integer;
 begin
-  if length(autos) = 0 then
-    cantidadAutos := -1
-  else
-    cantidadAutos := length(autos);
+  result := cantidadAutos;
 end;
 
 
@@ -99,6 +97,7 @@ begin
     autos[length(autos)-1].horarioEntrada.minutos := horaEntrada.minutos;
     autos[length(autos)-1].horarioSalida.horas := horaSalida.horas;
     autos[length(autos)-1].horarioSalida.minutos := horaSalida.minutos;
+    cantidadAutos := 1;
   end
   else begin
     setlength(Autos, length(autos)+1);
@@ -107,6 +106,7 @@ begin
     autos[length(autos)-1].horarioEntrada.minutos := horaEntrada.minutos;
     autos[length(autos)-1].horarioSalida.horas := horaSalida.horas;
     autos[length(autos)-1].horarioSalida.minutos := horaSalida.minutos;
+    inc(cantidadAutos);
   end;
 end;
 
