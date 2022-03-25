@@ -106,7 +106,10 @@ begin
        result := 'El auto no registra horas de estacionamiento';
        exit;
   end;
-
+   if (autos[indiceAuto].horarioEntrada.horas = 00) then
+    autos[indiceAuto].horarioEntrada.horas:=24;
+   if (autos[indiceAuto].horarioSalida.horas = 00) then
+    autos[indiceAuto].horarioSalida.horas:=24;
    if (autos[indiceAuto].horarioEntrada.horas > autos[indiceAuto].horarioSalida.horas) then
     cantHoras.horas := ((24 - autos[indiceAuto].horarioEntrada.horas) + autos[indiceAuto].horarioSalida.horas)
   else
