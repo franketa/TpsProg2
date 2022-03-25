@@ -13,7 +13,7 @@ type
   end;
 
   autoIngresado = object
-  
+
     patente : string;
     horarioEntrada : horario;
     horarioSalida : horario;
@@ -62,9 +62,11 @@ var
 begin
   indiceAuto := buscarAuto(pat);
   if indiceAuto = -1 then begin
+    memo.Lines.Clear;
     memo.Lines.Add( 'El auto no está registrado');
     exit;
   end;
+  memo.Lines.Clear;
   memo.Lines.Add('Patente: '+ autos[indiceAuto].patente);
   memo.Lines.Add('Horario de entrada: '+ autos[indiceAuto].patente);
   memo.Lines.Add('Horario de salida: '+ autos[indiceAuto].patente);
@@ -73,10 +75,7 @@ end;
 
 procedure Estacionamiento.setTarifaPorHora(tarifa:integer);
 begin
-  if tarifa < 0 then tarifaPorHora := -1
-  else begin
    tarifaPorHora := tarifa;
-  end;
 end;
 
 function Estacionamiento.getTarifaPorHora:integer;
@@ -99,7 +98,7 @@ end;
 function Estacionamiento.getTarifaAuto(indiceAuto:integer):string;
 var
   cantHoras:horario;
-  auxHorasEnMinutosEntrada, auxHorasEnMinutosSalida, auxMinutos:integer;
+  auxValor:integer;
 begin
 
    if (autos[indiceAuto].horarioEntrada.horas = autos[indiceAuto].horarioSalida.horas) and
@@ -126,8 +125,12 @@ begin
     result := 'media estadía'
   else begin
     //PODRIA SER calculo el total a pagar en base a la tarifa por hora
+    if cantHoras.minutos >= 1 then
+      auxValor := (cantHoras.horas *  tarifaPorHora) + tarifaPorHora
+    else
+      auxValor := (cantHoras.horas *  tarifaPorHora);
 
-    result := cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos.' ;
+    result := cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos. Valor a pagar: $'+ auxValor.ToString ;
   end;
 end;
 

@@ -42,6 +42,7 @@ object FormEj6: TFormEj6
     Font.Style = []
     ParentFont = False
     TabOrder = 1
+    OnClick = btnVerTarifaAPagarClick
   end
   object inputPatente: TEdit
     Left = 8
