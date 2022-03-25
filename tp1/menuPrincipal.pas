@@ -4,14 +4,17 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ej1_form, ej6_form, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ej1_form, ej6_form, ej7_form, Vcl.StdCtrls;
 
 type
   TFormMenuPrincipal = class(TForm)
+    btnej6: TButton;
     btnej1: TButton;
-    btnej2: TButton;
+    btnej7: TButton;
+    procedure btnej7Click(Sender: TObject);
+    procedure btnej6Click(Sender: TObject);
     procedure btnej1Click(Sender: TObject);
-    procedure btnej2Click(Sender: TObject);
+
   private
     { Private declarations }
   public
@@ -27,12 +30,17 @@ implementation
 
 procedure TFormMenuPrincipal.btnej1Click(Sender: TObject);
 begin
-  Formej1.Show;
+  formej1.Show
 end;
 
-procedure TFormMenuPrincipal.btnej2Click(Sender: TObject);
+procedure TFormMenuPrincipal.btnej6Click(Sender: TObject);
 begin
-  formEj6.Show;
+  formej7.Show;
+end;
+
+procedure TFormMenuPrincipal.btnej7Click(Sender: TObject);
+begin
+  formej6.Show;
 end;
 
 end.

@@ -21,7 +21,6 @@ type
       procedure setNumerador(num:integer);
       procedure setDenominador(num:integer);
       function Sumar(n2:NumeroRacional):NumeroRacional;
-
       function getdenominador():longint;
       function getnumerador():longint;
       function mostrar():string;
