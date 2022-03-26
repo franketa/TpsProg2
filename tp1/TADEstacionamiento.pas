@@ -3,18 +3,18 @@ unit TADEstacionamiento;
 interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, System.Math;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, System.Math, TADfecha;
 
 type
 
   horario = record
-    fecha:tdate;
     horas:integer;
     minutos:integer;
   end;
 
   autoIngresado = object
     patente : string;
+    fechaSalida : fecha;
     horarioEntrada : horario;
     horarioSalida : horario;
   end;
@@ -26,15 +26,51 @@ type
     tarifaPorHora:integer;
     function buscarAuto(pat:string):integer;
   public
+    function setFechaSalida(pat:string;d,m,a:integer):integer;
+    function getFechaSalida(pat:string; var f:fecha):integer;
     procedure setTarifaPorHora(tarifa:integer);
     function getTarifaPorHora:integer;
-    procedure addAuto(pat:string;horaEntrada, horaSalida:horario);
+    procedure addAuto(pat:string;horaEntrada, horaSalida:horario;fSalida:fecha);
     function getTarifaAuto(indiceAuto:integer):string;
     procedure mostrarDatosAuto(memo:Tmemo;pat:string);
     procedure mostrarDatosTodosLosAutos(memo:Tmemo);
   end;
 
 implementation
+
+function Estacionamiento.setFechaSalida(pat:string;d,m,a:integer):integer;
+var
+  fechaAux:fecha;
+  indiceAuto:integer;
+begin
+  result := -1;
+  fechaAux.setFecha(d,m,a);
+  if fechaAux.esCorrecta then begin
+    indiceAuto := buscarAuto(pat);
+    if indiceAuto = -1 then begin
+
+      exit;
+    end else begin
+      autos[indiceAuto].fechaSalida := fechaAux;
+      result := 1;
+    end;
+
+  end;
+end;
+
+function Estacionamiento.getFechaSalida(pat:string; var f:fecha):integer;
+var
+  indiceAuto:integer;
+begin
+  indiceAuto := buscarAuto(pat);
+  if indiceAuto = -1 then
+    result:=-1
+  else begin
+    f := autos[indiceAuto].fechaSalida;
+    result:=1;
+  end;
+
+end;
 
 procedure Estacionamiento.mostrarDatosTodosLosAutos(memo:Tmemo);
 var
@@ -87,8 +123,13 @@ function Estacionamiento.buscarAuto(pat:string):integer;
 var
   i,aux:integer;
 begin
+  if cantidadAutos = 0 then begin
+   result:=-1;
+   exit;
+  end;
+
   aux := -1;
-  for I := 0 to length(autos) do begin
+  for I := 0 to length(autos)-1 do begin
     if autos[i].patente = pat then
       aux:= i;
   end;
@@ -141,25 +182,33 @@ begin
 
 end;
 
-procedure Estacionamiento.addAuto(pat:string;horaEntrada, horaSalida:horario);
+procedure Estacionamiento.addAuto(pat:string;horaEntrada, horaSalida:horario;fSalida:fecha);
+var
+  aux:integer;
 begin
-  if length(autos) = 0 then begin
-    setlength(Autos,1);
-    autos[length(autos)-1].patente := pat;
-    autos[length(autos)-1].horarioEntrada.horas := horaEntrada.horas;
-    autos[length(autos)-1].horarioEntrada.minutos := horaEntrada.minutos;
-    autos[length(autos)-1].horarioSalida.horas := horaSalida.horas;
-    autos[length(autos)-1].horarioSalida.minutos := horaSalida.minutos;
-    cantidadAutos := 1;
-  end
+  aux := buscarAuto(pat);
+  if aux <> -1 then exit
   else begin
-    setlength(Autos, length(autos)+1);
-    autos[length(autos)-1].patente := pat;
-    autos[length(autos)-1].horarioEntrada.horas := horaEntrada.horas;
-    autos[length(autos)-1].horarioEntrada.minutos := horaEntrada.minutos;
-    autos[length(autos)-1].horarioSalida.horas := horaSalida.horas;
-    autos[length(autos)-1].horarioSalida.minutos := horaSalida.minutos;
-    inc(cantidadAutos);
+    if length(autos) = 0 then begin
+      setlength(Autos,1);
+      autos[length(autos)-1].patente := pat;
+      autos[length(autos)-1].horarioEntrada.horas := horaEntrada.horas;
+      autos[length(autos)-1].horarioEntrada.minutos := horaEntrada.minutos;
+      autos[length(autos)-1].horarioSalida.horas := horaSalida.horas;
+      autos[length(autos)-1].horarioSalida.minutos := horaSalida.minutos;
+      autos[length(autos)-1].fechaSalida := fSalida;
+      cantidadAutos := 1;
+    end
+    else begin
+      setlength(Autos, length(autos)+1);
+      autos[length(autos)-1].patente := pat;
+      autos[length(autos)-1].horarioEntrada.horas := horaEntrada.horas;
+      autos[length(autos)-1].horarioEntrada.minutos := horaEntrada.minutos;
+      autos[length(autos)-1].horarioSalida.horas := horaSalida.horas;
+      autos[length(autos)-1].horarioSalida.minutos := horaSalida.minutos;
+      autos[length(autos)-1].fechaSalida := fSalida;
+      inc(cantidadAutos);
+    end;
   end;
 end;
 
