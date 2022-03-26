@@ -8,6 +8,7 @@ uses
 type
 
   horario = record
+    fecha:tdate;
     horas:integer;
     minutos:integer;
   end;

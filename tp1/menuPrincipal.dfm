@@ -13,24 +13,31 @@ object FormMenuPrincipal: TFormMenuPrincipal
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
-  object btnej1: TButton
-    Left = 8
+  object btnej6: TButton
+    Left = 383
     Top = 8
-    Width = 175
-    Height = 89
-    Caption = 'Ejercicio 1'
-    Style = bsCommandLink
+    Width = 170
+    Height = 105
+    Caption = 'Ejercicio 7'
     TabOrder = 0
+    OnClick = btnej6Click
+  end
+  object btnej1: TButton
+    Left = 31
+    Top = 8
+    Width = 170
+    Height = 105
+    Caption = 'Ejercicio 1'
+    TabOrder = 1
     OnClick = btnej1Click
   end
-  object btnej2: TButton
-    Left = 189
+  object btnej7: TButton
+    Left = 207
     Top = 8
-    Width = 175
-    Height = 89
+    Width = 170
+    Height = 105
     Caption = 'Ejercicio 6'
-    Style = bsCommandLink
-    TabOrder = 1
-    OnClick = btnej2Click
+    TabOrder = 2
+    OnClick = btnej7Click
   end
 end
