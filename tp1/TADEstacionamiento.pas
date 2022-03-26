@@ -133,9 +133,9 @@ begin
   else if cantHoras.minutos  = 0 then
     auxValor := cantHoras.horas *  tarifaPorHora
   else if cantHoras.minutos > 10 then
-    auxValor := RoundTo((cantHoras.horas *  tarifaPorHora + (ceil(cantHoras.minutos / 10) * (tarifaPorHora / 6))), -2)
+    auxValor := RoundTo((cantHoras.horas *  tarifaPorHora + (cantHoras.minutos / 10 * (tarifaPorHora / 6))), -2)
   else begin
-    auxValor := cantHoras.horas *  tarifaPorHora + tarifaPorHora;
+    auxValor := RoundTo(cantHoras.horas *  tarifaPorHora + tarifaPorHora / 6,  -2);
   end;
   result := cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos. Valor a pagar: $'+ auxValor.ToString ;
 
