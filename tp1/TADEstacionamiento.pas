@@ -105,7 +105,7 @@ begin
      (autos[indiceAuto].horarioEntrada.minutos = autos[indiceAuto].horarioSalida.minutos) then begin
        result := 'El auto no registra horas de estacionamiento';
        exit;
-  end;
+    end;
    if (autos[indiceAuto].horarioEntrada.horas = 00) then
     autos[indiceAuto].horarioEntrada.horas:=24;
    if (autos[indiceAuto].horarioSalida.horas = 00) then
@@ -122,19 +122,22 @@ begin
   else
     cantHoras.minutos := autos[indiceAuto].horarioSalida.minutos - autos[indiceAuto].horarioEntrada.minutos;
 
-  if cantHoras.horas > 6 then
-    result := 'tarifa completa'
-  else if cantHoras.horas > 3 then
-    result := 'media estadía'
+  if cantHoras.horas > 6 then begin
+    result := cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos. Debe pagar tarifa completa';
+    exit;
+  end
+  else if cantHoras.horas > 3 then begin
+    result := cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos. Debe pagar media estadía';
+    exit;
+  end
   else if cantHoras.minutos  = 0 then
     auxValor := cantHoras.horas *  tarifaPorHora
   else if cantHoras.minutos > 10 then
     auxValor := RoundTo((cantHoras.horas *  tarifaPorHora + (ceil(cantHoras.minutos / 10) * (tarifaPorHora / 6))), -2)
-  else
+  else begin
     auxValor := cantHoras.horas *  tarifaPorHora + tarifaPorHora;
-
-
-    result := cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos. Valor a pagar: $'+ auxValor.ToString ;
+  end;
+  result := cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos. Valor a pagar: $'+ auxValor.ToString ;
 
 end;
 

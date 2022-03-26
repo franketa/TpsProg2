@@ -64,7 +64,7 @@ begin
   btnVerAutos.enabled:=false;
   horaEntrada.horas := 01;
   horaEntrada.minutos :=00;
-  horaSalida.horas := 03;
+  horaSalida.horas := 05;
   horaSalida.minutos := 11;
   Estacionamiento1.addAuto('1002', horaEntrada,horaSalida);
   Estacionamiento1.addAuto('EAS102', horaEntrada,horaSalida);
