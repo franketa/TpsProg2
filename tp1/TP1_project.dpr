@@ -8,7 +8,8 @@ uses
   TADEstacionamiento in 'TADEstacionamiento.pas',
   menuPrincipal in 'menuPrincipal.pas' {FormMenuPrincipal},
   ej7_form in 'ej7_form.pas' {FormEj7},
-  TADfecha in 'TADfecha.pas';
+  TADfecha in 'TADfecha.pas',
+  ej9_form in 'ej9_form.pas' {Form1};
 
 {$R *.res}
 
@@ -19,5 +20,6 @@ begin
   Application.CreateForm(TFormEj6, FormEj6);
   Application.CreateForm(TFormEj1, FormEj1);
   Application.CreateForm(TFormEj7, FormEj7);
+  Application.CreateForm(TForm1, Form1);
   Application.Run;
 end.
