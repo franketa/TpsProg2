@@ -8,7 +8,7 @@ uses
   Vcl.ExtCtrls;
 
 type
-  TForm1 = class(TForm)
+  TFormej9 = class(TForm)
     Memo1: TMemo;
     UpDown1: TUpDown;
     UpDown2: TUpDown;
@@ -21,25 +21,25 @@ type
     UpDown9: TUpDown;
     UpDown10: TUpDown;
     UpDown11: TUpDown;
-    Button1: TButton;
-    Button2: TButton;
-    LabeledEdit1: TLabeledEdit;
-    LabeledEdit2: TLabeledEdit;
-    LabeledEdit3: TLabeledEdit;
-    LabeledEdit4: TLabeledEdit;
-    LabeledEdit5: TLabeledEdit;
-    LabeledEdit6: TLabeledEdit;
-    LabeledEdit7: TLabeledEdit;
-    LabeledEdit8: TLabeledEdit;
-    LabeledEdit9: TLabeledEdit;
-    LabeledEdit10: TLabeledEdit;
-    LabeledEdit11: TLabeledEdit;
-    LabeledEdit12: TLabeledEdit;
+    btnIngresar: TButton;
+    btnCobrar: TButton;
+    inputMontoACobrar: TLabeledEdit;
+    inputMonUn: TLabeledEdit;
+    InputMonDos: TLabeledEdit;
+    inputMonCinco: TLabeledEdit;
+    inputMonDiez: TLabeledEdit;
+    inputBilDiez: TLabeledEdit;
+    inputBilVeinte: TLabeledEdit;
+    inputBilCincuenta: TLabeledEdit;
+    inputBilCien: TLabeledEdit;
+    inputBilDoscientos: TLabeledEdit;
+    inputBilQuinientos: TLabeledEdit;
+    inputBilMil: TLabeledEdit;
     Label1: TLabel;
     Label2: TLabel;
-    Button3: TButton;
+    btnCerrar: TButton;
     Label3: TLabel;
-    Button4: TButton;
+    btnVerSaldo: TButton;
     Label4: TLabel;
   private
     { Private declarations }
@@ -48,7 +48,7 @@ type
   end;
 
 var
-  Form1: TForm1;
+  formEj9: TFormej9;
 
 implementation
 

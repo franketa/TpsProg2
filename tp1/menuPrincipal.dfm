@@ -3,7 +3,7 @@ object FormMenuPrincipal: TFormMenuPrincipal
   Top = 0
   Caption = 'FormMenuPrincipal'
   ClientHeight = 434
-  ClientWidth = 736
+  ClientWidth = 716
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,7 +14,7 @@ object FormMenuPrincipal: TFormMenuPrincipal
   PixelsPerInch = 96
   TextHeight = 13
   object btnej6: TButton
-    Left = 383
+    Left = 359
     Top = 8
     Width = 170
     Height = 105
@@ -23,7 +23,7 @@ object FormMenuPrincipal: TFormMenuPrincipal
     OnClick = btnej6Click
   end
   object btnej1: TButton
-    Left = 31
+    Left = 7
     Top = 8
     Width = 170
     Height = 105
@@ -32,12 +32,21 @@ object FormMenuPrincipal: TFormMenuPrincipal
     OnClick = btnej1Click
   end
   object btnej7: TButton
-    Left = 207
+    Left = 183
     Top = 8
     Width = 170
     Height = 105
     Caption = 'Ejercicio 6'
     TabOrder = 2
     OnClick = btnej7Click
+  end
+  object btnej9: TButton
+    Left = 535
+    Top = 8
+    Width = 170
+    Height = 105
+    Caption = 'Ejercicio 9'
+    TabOrder = 3
+    OnClick = btnej9Click
   end
 end

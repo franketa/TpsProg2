@@ -112,7 +112,7 @@
         </DCCReference>
         <DCCReference Include="TADfecha.pas"/>
         <DCCReference Include="ej9_form.pas">
-            <Form>Form1</Form>
+            <Form>Formej9</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">

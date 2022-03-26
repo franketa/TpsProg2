@@ -1,7 +1,7 @@
-object Form1: TForm1
+object Formej9: TFormej9
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'Formej9'
   ClientHeight = 520
   ClientWidth = 673
   Color = clBtnFace
@@ -16,23 +16,23 @@ object Form1: TForm1
   object Label1: TLabel
     Left = 16
     Top = 7
-    Width = 31
+    Width = 33
     Height = 13
-    Caption = 'Label1'
+    Caption = 'Billetes'
   end
   object Label2: TLabel
     Left = 110
-    Top = 7
-    Width = 31
+    Top = 8
+    Width = 120
     Height = 13
-    Caption = 'Label2'
+    Caption = 'Ingresar billetes a la caja'
   end
   object Label3: TLabel
     Left = 110
     Top = 435
-    Width = 31
+    Width = 54
     Height = 13
-    Caption = 'Label3'
+    Caption = 'Cerrar caja'
   end
   object Label4: TLabel
     Left = 98
@@ -43,11 +43,11 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     Left = 336
-    Top = 26
+    Top = 8
     Width = 329
-    Height = 422
-    Lines.Strings = (
-      '0')
+    Height = 440
+    ReadOnly = True
+    ScrollBars = ssVertical
     TabOrder = 0
   end
   object UpDown1: TUpDown
@@ -55,7 +55,7 @@ object Form1: TForm1
     Top = 43
     Width = 16
     Height = 21
-    Associate = LabeledEdit2
+    Associate = inputMonUn
     TabOrder = 1
   end
   object UpDown2: TUpDown
@@ -63,7 +63,7 @@ object Form1: TForm1
     Top = 89
     Width = 16
     Height = 21
-    Associate = LabeledEdit3
+    Associate = InputMonDos
     TabOrder = 2
   end
   object UpDown3: TUpDown
@@ -71,7 +71,7 @@ object Form1: TForm1
     Top = 132
     Width = 16
     Height = 21
-    Associate = LabeledEdit4
+    Associate = inputMonCinco
     TabOrder = 3
   end
   object UpDown4: TUpDown
@@ -79,7 +79,7 @@ object Form1: TForm1
     Top = 177
     Width = 16
     Height = 21
-    Associate = LabeledEdit5
+    Associate = inputMonDiez
     TabOrder = 4
   end
   object UpDown5: TUpDown
@@ -87,7 +87,7 @@ object Form1: TForm1
     Top = 222
     Width = 16
     Height = 21
-    Associate = LabeledEdit6
+    Associate = inputBilDiez
     TabOrder = 5
   end
   object UpDown6: TUpDown
@@ -95,7 +95,7 @@ object Form1: TForm1
     Top = 270
     Width = 16
     Height = 21
-    Associate = LabeledEdit7
+    Associate = inputBilVeinte
     TabOrder = 6
   end
   object UpDown7: TUpDown
@@ -103,7 +103,7 @@ object Form1: TForm1
     Top = 315
     Width = 16
     Height = 21
-    Associate = LabeledEdit8
+    Associate = inputBilCincuenta
     TabOrder = 7
   end
   object UpDown8: TUpDown
@@ -111,7 +111,7 @@ object Form1: TForm1
     Top = 360
     Width = 16
     Height = 21
-    Associate = LabeledEdit9
+    Associate = inputBilCien
     TabOrder = 8
   end
   object UpDown9: TUpDown
@@ -119,7 +119,7 @@ object Form1: TForm1
     Top = 403
     Width = 16
     Height = 21
-    Associate = LabeledEdit10
+    Associate = inputBilDoscientos
     TabOrder = 9
   end
   object UpDown10: TUpDown
@@ -127,7 +127,7 @@ object Form1: TForm1
     Top = 446
     Width = 16
     Height = 21
-    Associate = LabeledEdit11
+    Associate = inputBilQuinientos
     TabOrder = 10
   end
   object UpDown11: TUpDown
@@ -135,183 +135,184 @@ object Form1: TForm1
     Top = 489
     Width = 16
     Height = 21
-    Associate = LabeledEdit12
+    Associate = inputBilMil
     TabOrder = 11
   end
-  object Button1: TButton
+  object btnIngresar: TButton
     Left = 110
     Top = 26
     Width = 202
     Height = 58
-    Caption = 'Button1'
+    Caption = 'Ingresar'
     TabOrder = 12
   end
-  object Button2: TButton
+  object btnCobrar: TButton
     Left = 110
     Top = 160
     Width = 202
     Height = 56
-    Caption = 'Button2'
+    Caption = 'Cobrar'
     TabOrder = 13
   end
-  object LabeledEdit1: TLabeledEdit
+  object inputMontoACobrar: TLabeledEdit
     Left = 110
     Top = 133
     Width = 202
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 77
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit1'
+    EditLabel.Caption = 'Monto a cobrar:'
+    EditLabel.Layout = tlBottom
     NumbersOnly = True
     TabOrder = 14
     Text = '0'
   end
-  object LabeledEdit2: TLabeledEdit
+  object inputMonUn: TLabeledEdit
     Left = 16
     Top = 43
     Width = 55
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 58
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit2'
+    EditLabel.Caption = 'Monedas $1'
     NumbersOnly = True
     TabOrder = 15
     Text = '0'
   end
-  object LabeledEdit3: TLabeledEdit
+  object InputMonDos: TLabeledEdit
     Left = 16
     Top = 89
     Width = 55
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 58
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit3'
+    EditLabel.Caption = 'Monedas $2'
     NumbersOnly = True
     TabOrder = 16
     Text = '0'
   end
-  object LabeledEdit4: TLabeledEdit
+  object inputMonCinco: TLabeledEdit
     Left = 16
     Top = 132
     Width = 55
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 58
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit4'
+    EditLabel.Caption = 'Monedas $5'
     NumbersOnly = True
     TabOrder = 17
     Text = '0'
   end
-  object LabeledEdit5: TLabeledEdit
+  object inputMonDiez: TLabeledEdit
     Left = 16
     Top = 177
     Width = 55
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 64
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit5'
+    EditLabel.Caption = 'Monedas $10'
     NumbersOnly = True
     TabOrder = 18
     Text = '0'
   end
-  object LabeledEdit6: TLabeledEdit
+  object inputBilDiez: TLabeledEdit
     Left = 16
     Top = 222
     Width = 55
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 54
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit6'
+    EditLabel.Caption = 'Billetes $10'
     NumbersOnly = True
     TabOrder = 19
     Text = '0'
   end
-  object LabeledEdit7: TLabeledEdit
+  object inputBilVeinte: TLabeledEdit
     Left = 16
     Top = 270
     Width = 55
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 54
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit7'
+    EditLabel.Caption = 'Billetes $20'
     NumbersOnly = True
     TabOrder = 20
     Text = '0'
   end
-  object LabeledEdit8: TLabeledEdit
+  object inputBilCincuenta: TLabeledEdit
     Left = 16
     Top = 315
     Width = 55
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 54
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit8'
+    EditLabel.Caption = 'Billetes $50'
     NumbersOnly = True
     TabOrder = 21
     Text = '0'
   end
-  object LabeledEdit9: TLabeledEdit
+  object inputBilCien: TLabeledEdit
     Left = 16
     Top = 360
     Width = 55
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 60
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit9'
+    EditLabel.Caption = 'Billetes $100'
     NumbersOnly = True
     TabOrder = 22
     Text = '0'
   end
-  object LabeledEdit10: TLabeledEdit
+  object inputBilDoscientos: TLabeledEdit
     Left = 16
     Top = 403
     Width = 55
     Height = 21
-    EditLabel.Width = 67
+    EditLabel.Width = 60
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit10'
+    EditLabel.Caption = 'Billetes $200'
     NumbersOnly = True
     TabOrder = 23
     Text = '0'
   end
-  object LabeledEdit11: TLabeledEdit
+  object inputBilQuinientos: TLabeledEdit
     Left = 16
     Top = 446
     Width = 55
     Height = 21
-    EditLabel.Width = 67
+    EditLabel.Width = 60
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit11'
+    EditLabel.Caption = 'Billetes $500'
     NumbersOnly = True
     TabOrder = 24
     Text = '0'
   end
-  object LabeledEdit12: TLabeledEdit
+  object inputBilMil: TLabeledEdit
     Left = 16
     Top = 489
     Width = 55
     Height = 21
-    EditLabel.Width = 67
+    EditLabel.Width = 66
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit12'
+    EditLabel.Caption = 'Billetes $1000'
     NumbersOnly = True
     TabOrder = 25
     Text = '0'
   end
-  object Button3: TButton
+  object btnCerrar: TButton
     Left = 110
     Top = 454
     Width = 202
     Height = 57
-    Caption = 'Button3'
+    Caption = 'Cerrar'
     TabOrder = 26
   end
-  object Button4: TButton
+  object btnVerSaldo: TButton
     Left = 336
     Top = 454
     Width = 329
     Height = 58
-    Caption = 'Button4'
+    Caption = 'Ver saldo'
     TabOrder = 27
   end
 end
