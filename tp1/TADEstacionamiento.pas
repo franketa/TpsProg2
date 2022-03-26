@@ -192,7 +192,7 @@ begin
   if cantHoras.horas > 6 then
     inc(rec.Ocupacion[1]);
   //cargo media estadia
-  if cantHoras.horas > 3 then
+  if (cantHoras.horas > 3)and (cantHoras.horas < 6)then
     inc(rec.Ocupacion[2]);
   //cargo caso de horas menores iguales a 3 y evaluo los minutos
   if cantHoras.horas <= 3 then begin
@@ -276,18 +276,20 @@ begin
     result:= 'El auto no registra tiempo de estacionamiento.';
     exit;
   end;
-  
+
   //si tiene estadias c
-  if ((rec.Ocupacion[1] = 1) and (rec.Ocupacion[3] <> 0)) then
-    strAux:='El auto debe 1 estadía completa y ' + rec.Ocupacion[3].ToString + ' horas.'
-  else if (rec.Ocupacion[1] = 1) and (rec.Ocupacion[4] <> 0) then
-    strAux:='El auto debe 1 estadía completa y ' + rec.Ocupacion[4].ToString + ' minutos.'
+  if (rec.Ocupacion[1] = 1) and (rec.Ocupacion[3] < 3) and (rec.Ocupacion[3] <> 0 ) then
+    strAux:='El auto debe 1 estadía completa y ' + rec.Ocupacion[3].ToString + ' horas por un valor de $' + rec.aPagar.ToString
+  else if (rec.Ocupacion[1] = 1) and (rec.Ocupacion[4] <> 0) and (rec.Ocupacion[3] = 0)  then
+    strAux:='El auto debe 1 estadía completa y ' + rec.Ocupacion[4].ToString + ' minutos por un valor de $' + rec.aPagar.ToString
   else if (rec.Ocupacion[1] = 1) and (rec.Ocupacion[2] = 1) then
     strAux:='El auto debe 1 estadía completa y 1 media estadia.'
+  else if (rec.Ocupacion[1] = 1) and (rec.Ocupacion[3] = 0) and (rec.Ocupacion[4] = 0)then
+    strAux:='El auto debe 1 estadía completa'
   else if (rec.Ocupacion[1] <> 0) and (rec.Ocupacion[3] <> 0) then
-    strAux:='El auto debe '+ rec.Ocupacion[1].ToString + ' estadías completas y ' + rec.Ocupacion[3].ToString + ' horas.'
+    strAux:='El auto debe '+ rec.Ocupacion[1].ToString + ' estadías completas y ' + rec.Ocupacion[3].ToString + ' horas por un valor de $' + rec.aPagar.ToString
   else if (rec.Ocupacion[1] <> 0) and (rec.Ocupacion[4] <> 0) then
-    strAux:='El auto debe '+ rec.Ocupacion[1].ToString + ' estadías completas y ' + rec.Ocupacion[4].ToString + ' minutos.'
+    strAux:='El auto debe '+ rec.Ocupacion[1].ToString + ' estadías completas y ' + rec.Ocupacion[4].ToString + ' minutos por un valor de $' + rec.aPagar.ToString
   else if (rec.Ocupacion[1] <> 0) and (rec.Ocupacion[2] = 1) then
     strAux:='El auto debe '+ rec.Ocupacion[1].ToString + ' estadías completas y 1 media estadia.'
   else
@@ -295,15 +297,17 @@ begin
   // si tiene me. estadia
   if rec.Ocupacion[2] = 1 then
     strAux:= 'El auto debe 1 media estadía.';
-  
-  // si tiene solo horas
-  if rec.Ocupacion[3] = 0 then
-    strAux:= 'El auto debe ' + rec.Ocupacion[4].ToString + ' minutos.'
-  else if rec.Ocupacion[4] <> 0 then
-    strAux:='El auto debe '+ rec.Ocupacion[3].ToString + ' horas y ' + rec.Ocupacion[4].ToString + ' minutos.'
-  else
-    strAux:= 'El auto debe ' + rec.Ocupacion[3].ToString + ' horas.';
 
+  // si tiene solo horas
+  if (rec.Ocupacion[1] = 0) and (rec.Ocupacion[2] = 0) then
+    if (rec.Ocupacion[3] = 0) then
+      strAux:= 'El auto debe ' + rec.Ocupacion[4].ToString + ' minutos por un valor de $' + rec.aPagar.ToString
+    else if rec.Ocupacion[4] <> 0 then
+      strAux:='El auto debe '+ rec.Ocupacion[3].ToString + ' horas y ' + rec.Ocupacion[4].ToString + ' minutos por un valor de $' + rec.aPagar.ToString
+    else if rec.Ocupacion[3] = 1 then
+      strAux:= 'El auto debe 1 hora por un valor de $' + rec.aPagar.ToString
+    else
+      strAux:= 'El auto debe ' + rec.Ocupacion[3].ToString + ' horas por un valor de $' + rec.aPagar.ToString;
   result:=strAux;
 end;
 

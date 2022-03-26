@@ -43,7 +43,6 @@ end;
 procedure TFormEj6.btnVerAutosClick(Sender: TObject);
 begin
   Estacionamiento1.mostrarDatosTodosLosAutos(memo1);
-  Estacionamiento1.getTarifaAuto(0);
 end;
 
 procedure TFormEj6.btnVerTarifaAPagarClick(Sender: TObject);
@@ -64,9 +63,9 @@ begin
   memo1.Clear;
   btnVerTarifaAPagar.enabled:=false;
   btnVerAutos.enabled:=false;
-  horaEntrada.horas := 01;
+  horaEntrada.horas := 00;
   horaEntrada.minutos :=00;
-  horaSalida.horas := 6;
+  horaSalida.horas := 00;
   horaSalida.minutos := 00;
   fechaSalida.setFecha(10,1,2001);
   Estacionamiento1.addAuto('1002', horaEntrada,horaSalida,fechaSalida );
