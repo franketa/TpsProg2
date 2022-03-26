@@ -110,6 +110,10 @@
             <Form>FormEj7</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+<<<<<<< HEAD
+=======
+        <DCCReference Include="TADfecha.pas"/>
+>>>>>>> 77a9c34a53a215afc85dde6ab355df008b8ca7bb
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
