@@ -18,10 +18,14 @@ type
     DateTimePicker3: TDateTimePicker;
     Label3: TLabel;
     Button1: TButton;
-    Button2: TButton;
+    btnConsultarRangoDado: TButton;
     Label4: TLabel;
     Label5: TLabel;
-    Button3: TButton;
+    btnEscribirArchivo: TButton;
+    Button4: TButton;
+    Label6: TLabel;
+    Edit1: TEdit;
+    Label7: TLabel;
 
     procedure FormCreate(Sender: TObject);
   private
@@ -75,6 +79,11 @@ begin
   hSalida.minutos:=30;
   fechaSalida.setFecha(1,3,2022);
   estacionamiento2.addAuto(pat,hEntrada,hSalida,fechaSalida);
+
+
+
+
+
 end;
 
 
