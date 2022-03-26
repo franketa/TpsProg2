@@ -33,17 +33,7 @@ var
   f1,f2:fecha;
   aux:integer;
 begin
-  f1.setFecha(1,2,2000);
-  f2.setFecha(1,1,2000);
- // f1.mostrarFecha(memo1);
- // f2.mostrarFecha(memo1);
-  if f2.perteneceAñoBisiesto then
-     memo1.Lines.Add('correcta');
 
-   f1.RESTARdIAS(389);
-  //aux:=f1.diferenciaDias(f2);
-   f1.mostrarFecha(memo1);
-   //memo1.Lines.Add(aux.ToString);
 end;
 
 procedure TFormEj7.FormCreate(Sender: TObject);

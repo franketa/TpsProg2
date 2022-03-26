@@ -3,7 +3,7 @@ unit TADEstacionamiento;
 interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, System.Math;
 
 type
 
@@ -98,7 +98,7 @@ end;
 function Estacionamiento.getTarifaAuto(indiceAuto:integer):string;
 var
   cantHoras:horario;
-  auxValor:integer;
+  auxValor:extended;
 begin
 
    if (autos[indiceAuto].horarioEntrada.horas = autos[indiceAuto].horarioSalida.horas) and
@@ -112,7 +112,7 @@ begin
     autos[indiceAuto].horarioSalida.horas:=24;
    if (autos[indiceAuto].horarioEntrada.horas > autos[indiceAuto].horarioSalida.horas) then
     cantHoras.horas := ((24 - autos[indiceAuto].horarioEntrada.horas) + autos[indiceAuto].horarioSalida.horas)
-  else
+   else
     cantHoras.horas := (autos[indiceAuto].horarioSalida.horas - autos[indiceAuto].horarioEntrada.horas) ;
 
   if autos[indiceAuto].horarioEntrada.minutos > autos[indiceAuto].horarioSalida.minutos then begin
@@ -126,15 +126,16 @@ begin
     result := 'tarifa completa'
   else if cantHoras.horas > 3 then
     result := 'media estadía'
-  else begin
-    //PODRIA SER calculo el total a pagar en base a la tarifa por hora
-    if cantHoras.minutos >= 1 then
-      auxValor := (cantHoras.horas *  tarifaPorHora) + tarifaPorHora
-    else
-      auxValor := (cantHoras.horas *  tarifaPorHora);
+  else if cantHoras.minutos  = 0 then
+    auxValor := cantHoras.horas *  tarifaPorHora
+  else if cantHoras.minutos > 10 then
+    auxValor := RoundTo((cantHoras.horas *  tarifaPorHora + (ceil(cantHoras.minutos / 10) * (tarifaPorHora / 6))), -2)
+  else
+    auxValor := cantHoras.horas *  tarifaPorHora + tarifaPorHora;
+
 
     result := cantHoras.horas.ToString + ' hs ' + cantHoras.minutos.ToString + ' minutos. Valor a pagar: $'+ auxValor.ToString ;
-  end;
+
 end;
 
 procedure Estacionamiento.addAuto(pat:string;horaEntrada, horaSalida:horario);
