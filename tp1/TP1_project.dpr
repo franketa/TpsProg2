@@ -9,7 +9,8 @@ uses
   menuPrincipal in 'menuPrincipal.pas' {FormMenuPrincipal},
   ej7_form in 'ej7_form.pas' {FormEj7},
   TADfecha in 'TADfecha.pas',
-  ej9_form in 'ej9_form.pas' {Formej9};
+  ej9_form in 'ej9_form.pas' {Formej9},
+  TADcajaRegistradora in 'TADcajaRegistradora.pas';
 
 {$R *.res}
 

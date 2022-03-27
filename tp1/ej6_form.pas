@@ -58,18 +58,19 @@ end;
 procedure TFormEj6.FormCreate(Sender: TObject);
 var
   horaEntrada, horaSalida:horario;
-  fechaSalida:fecha;
+  fechaSalida, fechaEntrada:fecha;
 begin
   memo1.Clear;
   btnVerTarifaAPagar.enabled:=false;
   btnVerAutos.enabled:=false;
-  horaEntrada.horas := 00;
+  horaEntrada.horas := 12;
   horaEntrada.minutos :=00;
-  horaSalida.horas := 00;
+  horaSalida.horas := 12;
   horaSalida.minutos := 00;
-  fechaSalida.setFecha(10,1,2001);
-  Estacionamiento1.addAuto('1002', horaEntrada,horaSalida,fechaSalida );
-  Estacionamiento1.addAuto('EAS102', horaEntrada,horaSalida,fechaSalida);
+  fechaEntrada.setFecha(1,1,2001);
+  fechaSalida.setFecha(2,1,2001);
+  Estacionamiento1.addAuto('1002', horaEntrada,horaSalida,fechaEntrada, fechaSalida );
+  Estacionamiento1.addAuto('EAS102', horaEntrada,horaSalida,fechaEntrada,  fechaSalida);
 
 end;
 

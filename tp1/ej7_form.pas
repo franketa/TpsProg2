@@ -48,7 +48,7 @@ procedure TFormEj7.FormCreate(Sender: TObject);
 var
   hEntrada, hSalida:horario;
   pat:String;
-  fechaSalida:fecha;
+  fechaSalida,fechaEntrada:fecha;
 begin
   memo1.Clear;
   pat:='EAE201';
@@ -57,28 +57,32 @@ begin
   hSalida.horas:=03;
   hSalida.minutos:=30;
   fechaSalida.setFecha(1,3,2022);
-  estacionamiento2.addAuto(pat,hEntrada,hSalida,fechaSalida);
+  fechaSalida.setFecha(1,3,2022);
+  estacionamiento2.addAuto(pat,hEntrada,hSalida,fechaEntrada, fechaSalida);
   pat:='AED109';
   hEntrada.horas := 22;
   hEntrada.minutos := 10;
   hSalida.horas:=3;
   hSalida.minutos:=14;
   fechaSalida.setFecha(2,3,2022);
-  estacionamiento2.addAuto(pat,hEntrada,hSalida,fechaSalida);
+  fechaSalida.setFecha(1,3,2022);
+  estacionamiento2.addAuto(pat,hEntrada,hSalida,fechaEntrada, fechaSalida);
   pat:='ESA304';
   hEntrada.horas := 01;
   hEntrada.minutos := 10;
   hSalida.horas:=03;
   hSalida.minutos:=30;
   fechaSalida.setFecha(3,3,2022);
-  estacionamiento2.addAuto(pat,hEntrada,hSalida,fechaSalida);
+  fechaSalida.setFecha(1,3,2022);
+  estacionamiento2.addAuto(pat,hEntrada,hSalida,fechaEntrada, fechaSalida);
   pat:='EGG341';
   hEntrada.horas := 01;
   hEntrada.minutos := 10;
   hSalida.horas:=03;
   hSalida.minutos:=30;
   fechaSalida.setFecha(1,3,2022);
-  estacionamiento2.addAuto(pat,hEntrada,hSalida,fechaSalida);
+  fechaSalida.setFecha(1,3,2022);
+  estacionamiento2.addAuto(pat,hEntrada,hSalida,fechaEntrada,fechaSalida);
 
 
 
