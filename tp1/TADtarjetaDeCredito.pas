@@ -7,14 +7,15 @@ uses SysUtils;
 type
   TarjetaDeCredito = object
     private
-       numeroDeTarjeta : integer;
+       numeroDeTarjeta : longint;
        fechaDeVencimientoMes: integer;
        fechaDeVencimientoAño: integer;
        limiteUnPago: real;
        limiteCuotas: real;
     public
       function validarNro():boolean;
-      procedure stepper(hi,lo,step:integer);
+      procedure setTarjeta(z:integer);
+      function mostrarTarjeta():string;
   end;
 
 
@@ -25,9 +26,13 @@ implementation
 
 { TarjetaDeCredito }
 
-procedure TarjetaDeCredito.stepper(hi, lo, step: integer);
+function TarjetaDeCredito.mostrarTarjeta():string;
 begin
-
+    result:= intToStr(numeroDeTarjeta)
+end;
+procedure TarjetaDeCredito.setTarjeta(z: longint);
+begin
+  numeroDeTarjeta:=z ;
 end;
 
 function TarjetaDeCredito.validarNro(): boolean;
@@ -36,6 +41,10 @@ I:integer;
 auxChar: char;
 v1: array[0..7] of integer;
 vDuplicados: array[0..7] of integer;
+auxiliarDuplicados:string;
+auxiliarIndividuales:string;
+totalSuma:integer;
+
 
 
 begin
@@ -47,19 +56,17 @@ begin
         else
         v1[I] := strToInt(auxChar);
       End;
-      for I := 0 to length(vDuplicados) do Begin
-
+      for I := 0 to length(vDuplicados)-1 do Begin
+       auxiliarDuplicados:=auxiliarDuplicados+intToStr(vDuplicados[I]);
+       auxiliarIndividuales:=auxiliarIndividuales+intToStr(v1[I]);
       End;
-
-
-
-
-
-
-
-
+      for I := 0 to (auxiliarDuplicados.Length-1)+(auxiliarIndividuales.Length-1) do Begin
+        totalSuma:= strToInt(auxiliarDuplicados[I])+ strToInt(auxiliarIndividuales);
+      End;
+      if totalSuma mod 10 = 0 then
+        result:=True
+      else result:= False;
 
 end;
-
 
 end.

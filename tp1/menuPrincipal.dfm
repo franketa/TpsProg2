@@ -10,7 +10,6 @@ object FormMenuPrincipal: TFormMenuPrincipal
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
   object btnej6: TButton
@@ -48,5 +47,14 @@ object FormMenuPrincipal: TFormMenuPrincipal
     Caption = 'Ejercicio 9'
     TabOrder = 3
     OnClick = btnej9Click
+  end
+  object Button1: TButton
+    Left = 24
+    Top = 136
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 4
+    OnClick = Button1Click
   end
 end

@@ -10,7 +10,9 @@ uses
   ej7_form in 'ej7_form.pas' {FormEj7},
   TADfecha in 'TADfecha.pas',
   ej9_form in 'ej9_form.pas' {Formej9},
-  TADcajaRegistradora in 'TADcajaRegistradora.pas';
+  TADcajaRegistradora in 'TADcajaRegistradora.pas',
+  TADtarjetaDeCredito in 'TADtarjetaDeCredito.pas',
+  ej10_form in 'ej10_form.pas' {Form1};
 
 {$R *.res}
 
@@ -22,5 +24,6 @@ begin
   Application.CreateForm(TFormEj1, FormEj1);
   Application.CreateForm(TFormEj7, FormEj7);
   Application.CreateForm(TFormej9, Formej9);
+  Application.CreateForm(TForm1, Formej10);
   Application.Run;
 end.
