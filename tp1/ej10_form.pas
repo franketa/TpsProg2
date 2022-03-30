@@ -29,9 +29,12 @@ implementation
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  tarjeta1.setTarjeta(strToint(EditNroTarjeta.Text));
-  Memo1.Lines.Add(tarjeta1.mostrarTarjeta);
+  tarjeta1.setTarjeta(editnrotarjeta.Text);
+  memo1.Lines.add(tarjeta1.mostrarTarjeta());
+  memo1.Lines.add(tarjeta1.validarNro());
 end;
+
+
 
 
 end.
