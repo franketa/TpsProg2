@@ -7,7 +7,7 @@ uses SysUtils;
 type
   TarjetaDeCredito = object
     private
-       numeroDeTarjeta : int64;
+       numeroDeTarjeta : string;
        fechaDeVencimientoMes: integer;
        fechaDeVencimientoAño: integer;
        limiteUnPago: real;
@@ -28,32 +28,63 @@ implementation
 
 function TarjetaDeCredito.mostrarTarjeta():string;
 begin
-    result:= intToStr(numeroDeTarjeta)
+    result:=numeroDeTarjeta
 end;
 procedure TarjetaDeCredito.setTarjeta(z: string);
 begin
-  numeroDeTarjeta:=strToInt64(z) ;
+  numeroDeTarjeta:=z;
 end;
 
 function TarjetaDeCredito.validarNro(): string;
 var
-I:integer;
-auxChar: char;
+I,X,C:integer;
+auxChar: string;
 v1: array[0..7] of integer;
 vDuplicados: array[0..7] of integer;
-auxiliarDuplicados:string;
+vIndividuales: array[0..7] of integer;
+v2: array[0..15] of integer;
+auxiliarTarjeta:string;
 auxiliarIndividuales:string;
 totalSuma:integer;
 
 begin
-      for I :=0 to numeroDeTarjeta.toString.Length-1 do Begin
-        auxChar := numeroDeTarjeta.ToString[I];
-        if I mod 2 = 0 then
-        vDuplicados[I] := strToInt(auxChar)*2
-        else v1[I] := strToInt(auxChar);
+      X:=0;
+      C:=0;
+      for I :=1 to numeroDeTarjeta.Length do Begin
+        auxChar:= NumeroDeTarjeta[I];
+        v2[I-1]:= strToInt(auxChar);
       End;
+
+      while X<=15  do Begin
+        v2[X] := v2[X]*2;
+        X:=X+2;
+      End;
+      I:=0;
+      for i := 0 to length(v2)-1 do Begin
+        auxiliarTarjeta:= auxiliarTarjeta+intToStr(v2[I]);
+      End;
+      I:=0;
+      for i := 1 to auxiliarTarjeta.Length do Begin
+      totalSuma:=totalSuma+strToInt(AuxiliarTarjeta[i]);
+      End;
+      if totalSuma mod 10 = 0 then
+      result:='true'
+      else
+      result:='false'
+
+
+
+
+
+
+
+
+
+
 
 
 end;
 
 end.
+
+
