@@ -49,7 +49,7 @@ object FormEj6: TFormEj6
   end
   object Label4: TLabel
     Left = 44
-    Top = 314
+    Top = 321
     Width = 6
     Height = 21
     Caption = ':'
@@ -89,7 +89,7 @@ object FormEj6: TFormEj6
   end
   object GroupBox1: TGroupBox
     Left = 0
-    Top = 147
+    Top = 155
     Width = 561
     Height = 224
     Caption = 'Cargar auto al sistema'
@@ -108,6 +108,7 @@ object FormEj6: TFormEj6
     Lines.Strings = (
       'Memo1')
     ParentFont = False
+    ScrollBars = ssVertical
     TabOrder = 0
   end
   object btnVerTarifaAPagar: TButton

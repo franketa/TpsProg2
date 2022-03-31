@@ -9,6 +9,8 @@ uses
 
 type
 
+  comparacionHorarios = (horarioanterior, horarioposterior, horariosiguales);
+
   estadias = (EC, ME, HR, MIN);
 
   horario = record
@@ -97,6 +99,7 @@ begin
     exit;
   end
   else begin
+    memo.Lines.add('La cantidad de autos registrados es: ' + cantidadAutos.ToString);
     for i := 0 to CantidadAutos - 1 do begin
       mostrarDatosAuto(memo, autosIngresados[i].patente);
     end;
@@ -170,10 +173,14 @@ begin
 
      // si el auto salio el mismo día que entro y registra tiempo de estacionado...
 
-    if (autosIngresados[indiceAuto].horarioEntrada.horas = 00) then
+    if (autosIngresados[indiceAuto].horarioEntrada.horas = 00) then begin
       autosIngresados[indiceAuto].horarioEntrada.horas:=24;
-    if (autosIngresados[indiceAuto].horarioSalida.horas = 00) then
+      autosIngresados[indiceAuto].horarioSalida.horas := autosIngresados[indiceAuto].horarioSalida.horas + 24;
+    end;
+    if (autosIngresados[indiceAuto].horarioSalida.horas = 00) then begin
       autosIngresados[indiceAuto].horarioSalida.horas:=24;
+      autosIngresados[indiceAuto].horarioEntrada.horas:= autosIngresados[indiceAuto].horarioEntrada.horas + 24;
+    end;
 
     horasEntradaEnSegundos := autosIngresados[indiceAuto].horarioEntrada.horas * 3600;
     horasSalidaEnSegundos := autosIngresados[indiceAuto].horarioSalida.horas * 3600;
@@ -213,10 +220,14 @@ begin
 //    else if (autosIngresados[indiceAuto].horarioEntrada.horas = 12) and (autosIngresados[indiceAuto].horarioSalida.horas = 12) then
 //      cantTiempoEstadia.horas := cantTiempoEstadia.horas + 24;
 
-    if (autosIngresados[indiceAuto].horarioEntrada.horas = 00) then
+    if (autosIngresados[indiceAuto].horarioEntrada.horas = 00) then begin
       autosIngresados[indiceAuto].horarioEntrada.horas:=24;
-    if (autosIngresados[indiceAuto].horarioSalida.horas = 00) then
+      autosIngresados[indiceAuto].horarioSalida.horas := autosIngresados[indiceAuto].horarioSalida.horas + 24;
+    end;
+    if (autosIngresados[indiceAuto].horarioSalida.horas = 00) then begin
       autosIngresados[indiceAuto].horarioSalida.horas:=24;
+      autosIngresados[indiceAuto].horarioEntrada.horas:= autosIngresados[indiceAuto].horarioEntrada.horas + 24;
+    end;
 
     horasEntradaEnSegundos := autosIngresados[indiceAuto].horarioEntrada.horas * 3600;
     horasSalidaEnSegundos := autosIngresados[indiceAuto].horarioSalida.horas * 3600;
@@ -238,12 +249,39 @@ begin
   end;
 end;
 
+function validarInputs(f1,f2:fecha;h1, h2:horario):boolean;
+var
+flag:boolean;
+begin
+
+  flag:=true;
+  if (h1.horas > 24) or (h2.horas > 24)
+  or (h2.minutos > 59) or (h1.minutos > 59) then begin
+    result := false;
+    exit
+  end;
+
+  if f1.compararFechas(f2) = anterior then begin
+    result := false;
+    exit
+  end else if (f1.compararFechas(f2) = igual) then begin
+    if (h1.horas = h2.horas) and (h1.minutos = h2.minutos) then flag := false;
+    if (h1.horas > h2.horas) then  flag := false;
+    if (h1.horas = h2.horas) and (h1.minutos > h2.minutos) then  flag := false;
+  //  if (h1.horas = 0) and () then
+
+  end;
+
+  result := flag;
+
+end;
+
 function Estacionamiento.addAuto(pat:string;horaEntrada, horaSalida:horario; fentrada, fSalida:fecha):string;
 var
   aux:integer;
 begin
   aux := buscarAuto(pat);
-  if (aux <> -1)or (fEntrada.compararFechas(fSalida) = anterior) then begin
+  if (aux <> -1 ) or not validarInputs(fentrada,fsalida,horaEntrada,Horasalida) then begin
    result := 'Error, el auto ya está registrado o datos no validos';
    exit // salgo si el auto ya esta en el vector
   end
@@ -307,5 +345,6 @@ begin
   ' horas ' + autosIngresados[indiceAuto].estadia[min].ToString +
   ' minutos que agregan un valor de $' + floattostr(roundto(autosIngresados[indiceAuto].totalAPagar, -2));
 end;
+
 
 end.
