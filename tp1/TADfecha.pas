@@ -113,7 +113,6 @@ begin
       if perteneceAñoBisiesto and (mes = 2) then diasRestantesMes := 29- dia else
       diasRestantesMes := cantDiasMeses[mes] ;
     end;
-
   end;
 end;
 
@@ -252,6 +251,8 @@ begin
   if n2 - n1 < 0 then result := (n2 - n1) * -1;
 
 end;
+
+
 
 end.
 

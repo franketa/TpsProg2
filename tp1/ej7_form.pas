@@ -17,7 +17,7 @@ type
     DateTimePicker2: TDateTimePicker;
     Label1: TLabel;
     Label2: TLabel;
-    DateTimePicker3: TDateTimePicker;
+    selectFechaConsulta: TDateTimePicker;
     Label3: TLabel;
     btnConsultarFechaDada: TButton;
     btnConsultarRangoDado: TButton;
@@ -31,6 +31,7 @@ type
 
     procedure FormCreate(Sender: TObject);
     procedure btnDefinirTarifaClick(Sender: TObject);
+    procedure btnConsultarFechaDadaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -64,6 +65,18 @@ Begin
   End;
 End;
 
+procedure TFormEj7.btnConsultarFechaDadaClick(Sender: TObject);
+var
+  strAux:string;
+  vStr:vecPalabrasLinea;
+  fAux:fecha;
+begin
+  strAux := dateTimeToStr(selectFechaConsulta.DateTime) + '/';
+  Parsing(strAux, '/', vStr);
+  fAux.setFecha(vStr[1].ToInteger, vStr[2].ToInteger, vStr[3].tointeger);
+  memo1.Lines.Add(Estacionamiento1.recaudacionXfecha(fAux));
+end;
+
 procedure TFormEj7.btnDefinirTarifaClick(Sender: TObject);
 begin
   estacionamiento1.setTarifaPorHora(strtoint(InputSetTarifa.Text));
@@ -73,15 +86,67 @@ begin
   btnEscribirArchivo.Enabled := true;
 end;
 
+procedure CrearAutosEnMemoria(memo:Tmemo);
+var
+  hE,hS:horario;
+  fE, fS:fecha;
+begin
+//  hE.horas := 01;
+//  hE.minutos := 0;
+//  hS.horas := 02;
+//  hS.minutos := 21;
+//  fE.setFecha(01,03,2022);
+//  fS.setFecha(01,03,2022);
+//  memo.lines.add(estacionamiento1.addAuto('AEF201', hE, hS, fE, fS));
+  hE.horas := 00;
+  hE.minutos := 00;
+  hS.horas := 06;
+  hS.minutos := 1;
+  fE.setFecha(01,03,2022);
+  fS.setFecha(01,03,2022);
+  memo.lines.add(estacionamiento1.addAuto('EAR401', hE, hS, fE, fS));
+  // dia 1 03 2022 2 21
+  hE.horas := 16;
+  hE.minutos := 20;
+  hS.horas := 18;
+  hS.minutos := 20;
+  fE.setFecha(02,03,2022);
+  fS.setFecha(02,03,2022);
+  memo.lines.add(estacionamiento1.addAuto('GTD451', hE, hS, fE, fS));
+  hE.horas := 12;
+  hE.minutos := 00;
+  hS.horas := 15;
+  hS.minutos := 1;
+  fE.setFecha(02,03,2022);
+  fS.setFecha(02,03,2022);
+  memo.lines.add(estacionamiento1.addAuto('LOP421', hE, hS, fE, fS));
+  // dia 2 3 2022  1me 1m
+  hE.horas := 01;
+  hE.minutos := 00;
+  hS.horas := 02;
+  hS.minutos := 20;
+  fE.setFecha(03,03,2022);
+  fS.setFecha(03,03,2022);
+  memo.lines.add(estacionamiento1.addAuto('IUY090', hE, hS, fE, fS));
+  hE.horas := 04;
+  hE.minutos := 0;
+  hS.horas := 05;
+  hS.minutos := 0;
+  fE.setFecha(03,03,2022);
+  fS.setFecha(03,03,2022);
+  memo.lines.add(estacionamiento1.addAuto('EED423', hE, hS, fE, fS));
+  // dia 3 3 2022 2:20
+  memo.Lines.Clear;
+
+end;
 
 procedure TFormEj7.FormCreate(Sender: TObject);
 begin
   memo1.Clear;
+  CrearAutosEnMemoria(MEMO1);
   btnConsultarRangoDado.Enabled := false;
   btnConsultarFechaDada.Enabled := false;
   btnEscribirArchivo.Enabled := false;
 end;
-
-
 
 end.

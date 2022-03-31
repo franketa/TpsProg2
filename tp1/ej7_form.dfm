@@ -154,7 +154,7 @@ object FormEj7: TFormEj7
     ParentFont = False
     TabOrder = 2
   end
-  object DateTimePicker3: TDateTimePicker
+  object selectFechaConsulta: TDateTimePicker
     Left = 8
     Top = 153
     Width = 87
@@ -184,6 +184,7 @@ object FormEj7: TFormEj7
     Font.Style = []
     ParentFont = False
     TabOrder = 4
+    OnClick = btnConsultarFechaDadaClick
   end
   object btnConsultarRangoDado: TButton
     Left = 254
