@@ -165,13 +165,11 @@ begin
         autosIngresados[indiceAuto].totalAPagar :=0;
   end;
 
-
   if autosIngresados[indiceAuto].fechaEntrada.compararFechas(autosIngresados[indiceAuto].fechaSalida) = igual then begin
     if (autosIngresados[indiceAuto].horarioEntrada.horas = autosIngresados[indiceAuto].horarioSalida.horas) and (autosIngresados[indiceAuto].horarioEntrada.minutos = autosIngresados[indiceAuto].horarioSalida.minutos) then
       exit;  // si el auto no registra horas de estacionamiento asigno 0 a todo y salgo
 
-
-     // si el auto salio el mismo día que entro y registra tiempo de estacionado...
+    // si el auto salio el mismo día que entro y registra tiempo de estacionado...
 
     if (autosIngresados[indiceAuto].horarioEntrada.horas = 00) then begin
       autosIngresados[indiceAuto].horarioEntrada.horas:=24;
@@ -198,6 +196,8 @@ begin
       autosIngresados[indiceAuto].estadia[hr] :=  cantTiempoEstadia.horas;
       autosIngresados[indiceAuto].estadia[min] :=  cantTiempoEstadia.minutos;
       autosIngresados[indiceAuto].totalAPagar := cantTiempoEstadia.horas * tarifaPorHora + ( cantTiempoEstadia.minutos / 10 * (tarifaPorHora / 6) );
+      if (autosIngresados[indiceAuto].estadia[hr] = 0) and (autosIngresados[indiceAuto].estadia[ec] = 0) and (autosIngresados[indiceAuto].estadia[me] = 0) and (autosIngresados[indiceAuto].estadia[min]<>0) then
+      autosIngresados[indiceAuto].totalAPagar := tarifaPorHora;
     end;
 
   end else begin
@@ -210,15 +210,6 @@ begin
     end;
 
     cantTiempoEstadia.horas := 0;
-
-//    if (autosIngresados[indiceAuto].horarioEntrada.horas < 12) and (autosIngresados[indiceAuto].horarioSalida.horas < 12) then
-//      cantTiempoEstadia.horas := cantTiempoEstadia.horas + 12
-//    else if (autosIngresados[indiceAuto].horarioEntrada.horas < 12) and (autosIngresados[indiceAuto].horarioSalida.horas > 12) then
-//      cantTiempoEstadia.horas := cantTiempoEstadia.horas + 24
-//    else if (autosIngresados[indiceAuto].horarioEntrada.horas > 12) and (autosIngresados[indiceAuto].horarioSalida.horas > 12) then
-//      cantTiempoEstadia.horas := cantTiempoEstadia.horas + 12
-//    else if (autosIngresados[indiceAuto].horarioEntrada.horas = 12) and (autosIngresados[indiceAuto].horarioSalida.horas = 12) then
-//      cantTiempoEstadia.horas := cantTiempoEstadia.horas + 24;
 
     if (autosIngresados[indiceAuto].horarioEntrada.horas = 00) then begin
       autosIngresados[indiceAuto].horarioEntrada.horas:=24;
@@ -245,6 +236,8 @@ begin
       autosIngresados[indiceAuto].estadia[hr] :=  cantTiempoEstadia.horas;
       autosIngresados[indiceAuto].estadia[min] :=  cantTiempoEstadia.minutos;
       autosIngresados[indiceAuto].totalAPagar := cantTiempoEstadia.horas * tarifaPorHora + ( cantTiempoEstadia.minutos / 10 * (tarifaPorHora / 6) );
+      if (autosIngresados[indiceAuto].estadia[hr] = 0) and (autosIngresados[indiceAuto].estadia[ec] = 0) and (autosIngresados[indiceAuto].estadia[min]<>0) then
+        autosIngresados[indiceAuto].totalAPagar := tarifaPorHora;
     end;
   end;
 end;
@@ -268,8 +261,6 @@ begin
     if (h1.horas = h2.horas) and (h1.minutos = h2.minutos) then flag := false;
     if (h1.horas > h2.horas) then  flag := false;
     if (h1.horas = h2.horas) and (h1.minutos > h2.minutos) then  flag := false;
-  //  if (h1.horas = 0) and () then
-
   end;
 
   result := flag;
@@ -337,13 +328,23 @@ begin
 end;
 
 function estacionamiento.getStrTarifaAPagar(indiceAuto:integer):string;
+var
+  i:estadias;
+  str:string;
 begin
   calcularTarifaAuto(indiceAuto);
-  result:= 'El auto debe  ' + autosIngresados[indiceAuto].estadia[EC].ToString +
-  ' estadias completas ' + autosIngresados[indiceAuto].estadia[me].ToString +
-  ' medias estadias ' +  autosIngresados[indiceAuto].estadia[hr].ToString +
-  ' horas ' + autosIngresados[indiceAuto].estadia[min].ToString +
-  ' minutos que agregan un valor de $' + floattostr(roundto(autosIngresados[indiceAuto].totalAPagar, -2));
+  str := '';
+  if autosIngresados[indiceAuto].estadia[ec] <> 0 then
+    str := autosIngresados[indiceAuto].estadia[ec].ToString + ' estadias completas';
+  if autosIngresados[indiceAuto].estadia[me] <> 0 then
+    str := str + autosIngresados[indiceAuto].estadia[me].ToString + ' medias estadias';
+  if autosIngresados[indiceAuto].estadia[hr] <> 0 then
+    str := str + autosIngresados[indiceAuto].estadia[hr].ToString + ' horas';
+  if autosIngresados[indiceAuto].estadia[min] <> 0 then begin
+    str := str + autosIngresados[indiceAuto].estadia[min].ToString + ' minutos que agregan un valor de $' + floattostr(roundto(autosIngresados[indiceAuto].totalAPagar, -2));
+  end;
+
+  result := str;
 end;
 
 
