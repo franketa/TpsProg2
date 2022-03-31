@@ -63,14 +63,14 @@ begin
       for i := 0 to length(v2)-1 do Begin
         auxiliarTarjeta:= auxiliarTarjeta+intToStr(v2[I]);
       End;
-      I:=0;
-      for i := 1 to auxiliarTarjeta.Length do Begin
+
+      for I := 1 to auxiliarTarjeta.Length do Begin
       totalSuma:=totalSuma+strToInt(AuxiliarTarjeta[i]);
       End;
-      if totalSuma mod 10 = 0 then
-      result:='true'
+      if (totalSuma-1) mod 10 = 0 then
+      result:='true'+auxiliarTarjeta
       else
-      result:='false'
+      result:='false'+auxiliarTarjeta+intToStr(TotalSuma);
 
 
 
