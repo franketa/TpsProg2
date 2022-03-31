@@ -31,9 +31,15 @@ type
     function compararFechas(fechaDos:fecha):ResultadoComparacionFechas;
     function perteneceAñoBisiesto():boolean;
     function diferenciaDias(fechados:fecha):integer;
+    function devolverStrFecha():string;
   end;
 
 implementation
+
+function fecha.devolverStrFecha():string;
+begin
+  result:=  dia.ToString + '/' + mes.ToString + '/' + año.ToString;
+end;
 
 procedure fecha.setFecha(d,m,a:integer);
 begin

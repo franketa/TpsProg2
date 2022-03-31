@@ -5,13 +5,11 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, System.Math, TADfecha;
 
+
+
 type
 
-  autoDebePagar = record
-    Ocupacion : array [1..4] of integer;
-    //pos 1 igual a estadias completas, 2 media estadia, 3 horas ocupadas, 4 minutos ocupados
-    aPagar : extended;
-  end;
+  estadias = (EC, ME, HR, MIN);
 
   horario = record
     horas:integer;
@@ -24,28 +22,37 @@ type
     fechaSalida : fecha;
     horarioEntrada : horario;
     horarioSalida : horario;
+    estadia : array [EC..MIN] of integer;
+    totalAPagar : extended;
   end;
 
   Estacionamiento = object
   private
-    Autos : array of AutoIngresado;
+    autosIngresados : array of AutoIngresado;
     cantidadAutos:integer;
     tarifaPorHora:integer;
     function buscarAuto(pat:string):integer;
+    procedure calcularTarifaAuto(indiceAuto:integer);
+    function getStrTarifaAPagar(indiceAuto:integer):string;
+    function recaudacionXhoraEnXFecha(f:fecha):longint;
+   // function recaudacionMediaEstadiaEnXFecha(f:fecha):longint;
+   // function recaudacionEstadiaCompletaEnXFecha(f:fecha):longint;
   public
     function setFechaSalida(pat:string;d,m,a:integer):integer;
     function getFechaSalida(pat:string):fecha;
-    function recaudacionXhoraFecha(f:fecha):longint;
-   // function recaudacionMEstadiaFecha(f:fecha):longint;
-   // function recaudacionEstadiaCFecha(f:fecha):longint;
     procedure setTarifaPorHora(tarifa:integer);
     function getTarifaPorHora:integer;
-    procedure addAuto(pat:string;horaEntrada, horaSalida:horario;fentrada,fSalida:fecha);
-    function getTarifaAuto(indiceAuto:integer):autoDebePagar;
+    function addAuto(pat:string;horaEntrada, horaSalida:horario;fentrada,fSalida:fecha):string;
     procedure mostrarDatosAuto(memo:Tmemo;pat:string);
     procedure mostrarDatosTodosLosAutos(memo:Tmemo);
-    function getStrTarifaAPagar(indiceAuto:integer):string;
+
   end;
+
+const
+
+  horasEstadias : array [EC.. ME] of integer =
+  (6, 3);
+
 
 implementation
 
@@ -62,7 +69,7 @@ begin
 
       exit;
     end else begin
-      autos[indiceAuto].fechaSalida := fechaAux;
+      AutosIngresados[indiceAuto].fechaSalida := fechaAux;
       result := 1;
     end;
 
@@ -76,7 +83,7 @@ begin
   indiceAuto := buscarAuto(pat);
   if indiceAuto = -1 then exit
   else begin
-    result := autos[indiceAuto].fechaSalida;
+    result := autosIngresados[indiceAuto].fechaSalida;
   end;
 end;
 
@@ -90,14 +97,10 @@ begin
     exit;
   end
   else begin
-    for i := 0 to CantidadAutos -1 do begin
-      memo.Lines.Add('Patente: '+ autos[i].patente);
-      memo.Lines.Add('Horario de entrada: '+ autos[i].patente);
-      memo.Lines.Add('Horario de salida: '+ autos[i].patente);
-      memo.Lines.Add('Tarifa a pagar: '+ getStrTarifaAPagar(i));
+    for i := 0 to CantidadAutos - 1 do begin
+      mostrarDatosAuto(memo, autosIngresados[i].patente);
     end;
   end;
-
  end;
 
 procedure Estacionamiento.mostrarDatosAuto(memo:Tmemo;pat:string);
@@ -110,10 +113,12 @@ begin
     memo.Lines.Add( 'El auto no está registrado');
     exit;
   end;
-  memo.Lines.Clear;
-  memo.Lines.Add('Patente: '+ autos[indiceAuto].patente);
-  memo.Lines.Add('Horario de entrada: '+ autos[indiceAuto].horarioEntrada.horas.ToString + ':' + autos[indiceAuto].horarioEntrada.minutos.ToString );
-  memo.Lines.Add('Horario de salida: '+ autos[indiceAuto].horarioSalida.horas.ToString + ':' + autos[indiceAuto].horarioSalida.minutos.ToString);
+  memo.Lines.add('-------------------------------------------------');
+  memo.Lines.Add('Patente: '+ autosIngresados[indiceAuto].patente);
+  memo.Lines.Add('Fecha de entrada: '+ autosIngresados[indiceAuto].fechaEntrada.devolverStrFecha);
+  memo.Lines.Add('Fecha de salida: '+ autosIngresados[indiceAuto].fechaSalida.devolverStrFecha);
+  memo.Lines.Add('Horario de entrada: '+ autosIngresados[indiceAuto].horarioEntrada.horas.ToString + ':' + autosIngresados[indiceAuto].horarioEntrada.minutos.ToString );
+  memo.Lines.Add('Horario de salida: '+ autosIngresados[indiceAuto].horarioSalida.horas.ToString + ':' + autosIngresados[indiceAuto].horarioSalida.minutos.ToString);
   memo.Lines.Add('Tarifa a pagar: '+ getStrTarifaAPagar(indiceAuto));
 end;
 
@@ -137,160 +142,140 @@ begin
   end;
 
   aux := -1;
-  for I := 0 to length(autos)-1 do begin
-    if autos[i].patente = pat then
+  for I := 0 to length(autosIngresados)-1 do begin
+    if autosIngresados[i].patente = pat then
       aux:= i;
   end;
   result := aux;
 end;
 
-function Estacionamiento.getTarifaAuto(indiceAuto:integer):autoDebePagar;
+procedure Estacionamiento.calcularTarifaAuto(indiceAuto:integer);
 var
-  cantTiempoEstadia:horario;
-  auxValor:extended;
-  i, difDias:integer;
-   horaEnsE, minEnSE, horaEnsS, minEnSS:longint;
-  rec:autoDebePagar;
+  i: estadias;
+  horasEntradaEnSegundos, minutosEntradaEnSegundos, horasSalidaEnSegundos, minutosSalidaEnSegundos :longint;
+  cantTiempoEstadia : horario;
+  difDias:integer;
 begin
-  rec.aPagar := 0;
-  for i := 1 to 4 do
-    rec.Ocupacion[i]:=0;
-  cantTiempoEstadia.horas := 0;
-  cantTiempoEstadia.minutos := 0;
-  // si sale el mismo dia que entra..
-  if autos[indiceAuto].fechaEntrada.compararFechas(autos[indiceAuto].fechaSalida) = igual then begin
 
-    if (autos[indiceAuto].horarioEntrada.horas = autos[indiceAuto].horarioSalida.horas) and
-    (autos[indiceAuto].horarioEntrada.minutos = autos[indiceAuto].horarioSalida.minutos) then begin
-      result:= rec;
-      exit;
-    end;
-
-    if (autos[indiceAuto].horarioEntrada.horas = 00) then
-    autos[indiceAuto].horarioEntrada.horas:=24;
-    if (autos[indiceAuto].horarioSalida.horas = 00) then
-    autos[indiceAuto].horarioSalida.horas:=24;
-
-    horaEnsE := autos[indiceAuto].horarioEntrada.horas * 3600 + autos[indiceAuto].horarioEntrada.minutos * 60;
-    horaEnsS := autos[indiceAuto].horarioSalida.horas * 3600 + autos[indiceAuto].horarioSalida.minutos * 60;
-
-    cantTiempoEstadia.horas := abs(horaEnsS - horaEnsE) div 3600;
-    cantTiempoEstadia.minutos := abs(horaEnsS - horaEnsE) div 60;
-
-    
-
-    //evaluo distintas posibilidades de tarifa a pagar
-    //cargo estadias completas
-    if cantTiempoEstadia.horas > 6 then
-      inc(rec.Ocupacion[1]);
-    //cargo media estadia
-    if (cantTiempoEstadia.horas > 3) and (cantTiempoEstadia.horas < 6) then
-      inc(rec.Ocupacion[2]);
-    //cargo caso de horas menores iguales a 3 y evaluo los minutos
-    if cantTiempoEstadia.horas <= 3 then begin
-      rec.Ocupacion[3]:=cantTiempoEstadia.horas;
-      rec.Ocupacion[4]:=cantTiempoEstadia.minutos;
-      if rec.Ocupacion[4] = 0 then // si no tiene minutos solo calculo con horas
-        rec.aPagar := rec.Ocupacion[3] * tarifaPorHora
-      else if rec.Ocupacion[4] <= 10 then // si tiene menos o 10 minutos solo sumo una tarifaxhora
-        rec.aPagar := RoundTo(rec.Ocupacion[3] * tarifaPorHora + tarifaPorHora, -2)
-      else // si tiene mas de 10 minutos, calculo el proporcional de la tarifaxhora cada 10 minutos
-        rec.aPagar := RoundTo(rec.Ocupacion[3] * tarifaPorHora + ( rec.Ocupacion[4] / 10 * (tarifaPorHora / 6) ), -2);
-    end;
-    // devuelvo el record, que va a tener
-    // en 1 las estadias completas, en 2 las media estadias, en 3 las horas y en 4 los minutos. en aPagar el total por hora y minutos
-    result:= rec;
-  end else if autos[indiceAuto].fechaEntrada.compararFechas(autos[indiceAuto].fechaSalida) = Anterior then exit else begin  // si sale un dia posterior al que entro..
-
-    difDias := autos[indiceAuto].fechaEntrada.diferenciaDias(autos[indiceAuto].fechaSalida);
-    // si la diferencia es mayor a 1, añado estadia completa por cada dia - 1
-    while difDias > 1 do begin
-      inc(rec.Ocupacion[1]);
-      dec(difDias);
-    end;
-
-    // si la diferencia es uno, veo casos posibles..
-    if (autos[indiceAuto].horarioEntrada.horas < 12) and (autos[indiceAuto].horarioSalida.horas < 12) then
-      rec.Ocupacion[3] := rec.Ocupacion[3] + 12
-    else if (autos[indiceAuto].horarioEntrada.horas < 12) and (autos[indiceAuto].horarioSalida.horas > 12) then
-      rec.Ocupacion[3] := rec.Ocupacion[3] + 24
-    else if (autos[indiceAuto].horarioEntrada.horas > 12) and (autos[indiceAuto].horarioSalida.horas > 12) then
-      rec.Ocupacion[3] := rec.Ocupacion[3] + 12
-    else if (autos[indiceAuto].horarioEntrada.horas = 12) and (autos[indiceAuto].horarioSalida.horas = 12) then
-    rec.Ocupacion[3] := rec.Ocupacion[3] + 24;    
-
-    if (autos[indiceAuto].horarioEntrada.horas = 00) then
-    autos[indiceAuto].horarioEntrada.horas:=24;
-    if (autos[indiceAuto].horarioSalida.horas = 00) then
-    autos[indiceAuto].horarioSalida.horas:=24;
-
-    horaEnsE := autos[indiceAuto].horarioEntrada.horas * 3600 + autos[indiceAuto].horarioEntrada.minutos * 60;
-    horaEnsS := autos[indiceAuto].horarioSalida.horas * 3600 + autos[indiceAuto].horarioSalida.minutos * 60;
-
-    cantTiempoEstadia.horas := abs(horaEnsS - horaEnsE) div 3600;
-    cantTiempoEstadia.minutos := abs(horaEnsS - horaEnsE) div 60;
-
-    //evaluo distintas posibilidades de tarifa a pagar
-    //cargo estadias completas
-    if cantTiempoEstadia.horas > 6 then
-      inc(rec.Ocupacion[1]);
-    //cargo media estadia
-    if (cantTiempoEstadia.horas > 3) and (cantTiempoEstadia.horas < 6) then
-      inc(rec.Ocupacion[2]);
-    //cargo caso de horas menores iguales a 3 y evaluo los minutos
-    if cantTiempoEstadia.horas <= 3 then begin
-      rec.Ocupacion[3]:= rec.Ocupacion[3] + cantTiempoEstadia.horas;
-      rec.Ocupacion[4]:= rec.Ocupacion[4] + cantTiempoEstadia.minutos;
-      if rec.Ocupacion[4] = 0 then // si no tiene minutos solo calculo con horas
-        rec.aPagar := rec.Ocupacion[3] * tarifaPorHora
-      else if rec.Ocupacion[4] <= 10 then // si tiene menos o 10 minutos solo sumo una tarifaxhora
-        rec.aPagar := RoundTo(rec.Ocupacion[3] * tarifaPorHora + tarifaPorHora, -2)
-      else // si tiene mas de 10 minutos, calculo el proporcional de la tarifaxhora cada 10 minutos
-        rec.aPagar := RoundTo(rec.Ocupacion[3] * tarifaPorHora + ( rec.Ocupacion[4] / 10 * (tarifaPorHora / 6) ), -2);
-    end;
-    // devuelvo el record, que va a tener
-    // en 1 las estadias completas, en 2 las media estadias, en 3 las horas y en 4 los minutos. en aPagar el total por hora y minutos
-    result:= rec;
+  for i := ec to min do begin
+        autosIngresados[indiceAuto].estadia[i] := 0;
+        autosIngresados[indiceAuto].totalAPagar :=0;
   end;
 
 
+  if autosIngresados[indiceAuto].fechaEntrada.compararFechas(autosIngresados[indiceAuto].fechaSalida) = igual then begin
+    if (autosIngresados[indiceAuto].horarioEntrada.horas = autosIngresados[indiceAuto].horarioSalida.horas) and (autosIngresados[indiceAuto].horarioEntrada.minutos = autosIngresados[indiceAuto].horarioSalida.minutos) then
+      exit;  // si el auto no registra horas de estacionamiento asigno 0 a todo y salgo
 
-  
+
+     // si el auto salio el mismo día que entro y registra tiempo de estacionado...
+
+    if (autosIngresados[indiceAuto].horarioEntrada.horas = 00) then
+      autosIngresados[indiceAuto].horarioEntrada.horas:=24;
+    if (autosIngresados[indiceAuto].horarioSalida.horas = 00) then
+      autosIngresados[indiceAuto].horarioSalida.horas:=24;
+
+    horasEntradaEnSegundos := autosIngresados[indiceAuto].horarioEntrada.horas * 3600;
+    horasSalidaEnSegundos := autosIngresados[indiceAuto].horarioSalida.horas * 3600;
+    minutosEntradaEnSegundos :=  autosIngresados[indiceAuto].horarioEntrada.minutos * 60;
+    minutosSalidaEnSegundos :=  autosIngresados[indiceAuto].horarioSalida.minutos * 60;
+
+    cantTiempoEstadia.horas := abs(horasSalidaEnSegundos - horasEntradaEnSegundos) div 3600;
+    cantTiempoEstadia.minutos := abs(minutosSalidaEnSegundos - minutosEntradaEnSegundos) div 60;
+
+    if cantTiempoEstadia.horas > horasEstadias[EC] then
+      autosIngresados[indiceAuto].estadia[ec] := 1
+    else if (cantTiempoEstadia.horas < horasEstadias[EC]) and (cantTiempoEstadia.horas > horasEstadias[ME]) then
+      autosIngresados[indiceAuto].estadia[me] := 1
+    else begin
+      autosIngresados[indiceAuto].estadia[hr] :=  cantTiempoEstadia.horas;
+      autosIngresados[indiceAuto].estadia[min] :=  cantTiempoEstadia.minutos;
+      autosIngresados[indiceAuto].totalAPagar := cantTiempoEstadia.horas * tarifaPorHora + ( cantTiempoEstadia.minutos / 10 * (tarifaPorHora / 6) );
+    end;
+
+  end else begin
+
+    difDias := autosIngresados[indiceAuto].fechaEntrada.diferenciaDias(autosIngresados[indiceAuto].fechaSalida);
+    // si la diferencia es mayor a 1, añado estadia completa por cada dia - 1
+    while difDias >= 1 do begin
+      inc(autosIngresados[indiceAuto].estadia[ec]);
+      dec(difDias);
+    end;
+
+    cantTiempoEstadia.horas := 0;
+
+//    if (autosIngresados[indiceAuto].horarioEntrada.horas < 12) and (autosIngresados[indiceAuto].horarioSalida.horas < 12) then
+//      cantTiempoEstadia.horas := cantTiempoEstadia.horas + 12
+//    else if (autosIngresados[indiceAuto].horarioEntrada.horas < 12) and (autosIngresados[indiceAuto].horarioSalida.horas > 12) then
+//      cantTiempoEstadia.horas := cantTiempoEstadia.horas + 24
+//    else if (autosIngresados[indiceAuto].horarioEntrada.horas > 12) and (autosIngresados[indiceAuto].horarioSalida.horas > 12) then
+//      cantTiempoEstadia.horas := cantTiempoEstadia.horas + 12
+//    else if (autosIngresados[indiceAuto].horarioEntrada.horas = 12) and (autosIngresados[indiceAuto].horarioSalida.horas = 12) then
+//      cantTiempoEstadia.horas := cantTiempoEstadia.horas + 24;
+
+    if (autosIngresados[indiceAuto].horarioEntrada.horas = 00) then
+      autosIngresados[indiceAuto].horarioEntrada.horas:=24;
+    if (autosIngresados[indiceAuto].horarioSalida.horas = 00) then
+      autosIngresados[indiceAuto].horarioSalida.horas:=24;
+
+    horasEntradaEnSegundos := autosIngresados[indiceAuto].horarioEntrada.horas * 3600;
+    horasSalidaEnSegundos := autosIngresados[indiceAuto].horarioSalida.horas * 3600;
+    minutosEntradaEnSegundos :=  autosIngresados[indiceAuto].horarioEntrada.minutos * 60;
+    minutosSalidaEnSegundos :=  autosIngresados[indiceAuto].horarioSalida.minutos * 60;
+
+    cantTiempoEstadia.horas := abs(horasSalidaEnSegundos - horasEntradaEnSegundos) div 3600;
+    cantTiempoEstadia.minutos := abs(minutosSalidaEnSegundos - minutosEntradaEnSegundos) div 60;
+
+    if cantTiempoEstadia.horas > horasEstadias[EC] then
+      inc(autosIngresados[indiceAuto].estadia[ec])
+    else if (cantTiempoEstadia.horas < horasEstadias[EC]) and (cantTiempoEstadia.horas > horasEstadias[ME]) then
+      inc(autosIngresados[indiceAuto].estadia[me])
+    else begin
+      autosIngresados[indiceAuto].estadia[hr] :=  cantTiempoEstadia.horas;
+      autosIngresados[indiceAuto].estadia[min] :=  cantTiempoEstadia.minutos;
+      autosIngresados[indiceAuto].totalAPagar := cantTiempoEstadia.horas * tarifaPorHora + ( cantTiempoEstadia.minutos / 10 * (tarifaPorHora / 6) );
+    end;
+  end;
 end;
 
-procedure Estacionamiento.addAuto(pat:string;horaEntrada, horaSalida:horario; fentrada, fSalida:fecha);
+function Estacionamiento.addAuto(pat:string;horaEntrada, horaSalida:horario; fentrada, fSalida:fecha):string;
 var
   aux:integer;
 begin
   aux := buscarAuto(pat);
-  if aux <> -1 then exit
+  if (aux <> -1)or (fEntrada.compararFechas(fSalida) = anterior) then begin
+   result := 'Error, el auto ya está registrado o datos no validos';
+   exit // salgo si el auto ya esta en el vector
+  end
   else begin
-    if length(autos) = 0 then begin
-      setlength(Autos,1);
-      autos[length(autos)-1].patente := pat;
-      autos[length(autos)-1].horarioEntrada.horas := horaEntrada.horas;
-      autos[length(autos)-1].horarioEntrada.minutos := horaEntrada.minutos;
-      autos[length(autos)-1].horarioSalida.horas := horaSalida.horas;
-      autos[length(autos)-1].horarioSalida.minutos := horaSalida.minutos;
-      autos[length(autos)-1].fechaSalida := fSalida;
-      autos[length(autos)-1].fechaEntrada := fentrada;
+    if length(autosIngresados) = 0 then begin
+      setlength(autosIngresados,1);
+      autosIngresados[length(autosIngresados)-1].patente := pat;
+      autosIngresados[length(autosIngresados)-1].horarioEntrada.horas := horaEntrada.horas;
+      autosIngresados[length(autosIngresados)-1].horarioEntrada.minutos := horaEntrada.minutos;
+      autosIngresados[length(autosIngresados)-1].horarioSalida.horas := horaSalida.horas;
+      autosIngresados[length(autosIngresados)-1].horarioSalida.minutos := horaSalida.minutos;
+      autosIngresados[length(autosIngresados)-1].fechaSalida := fSalida;
+      autosIngresados[length(autosIngresados)-1].fechaEntrada := fentrada;
       cantidadAutos := 1;
+      result := 'Auto cargado correctamente';
     end
     else begin
-      setlength(Autos, length(autos)+1);
-      autos[length(autos)-1].patente := pat;
-      autos[length(autos)-1].horarioEntrada.horas := horaEntrada.horas;
-      autos[length(autos)-1].horarioEntrada.minutos := horaEntrada.minutos;
-      autos[length(autos)-1].horarioSalida.horas := horaSalida.horas;
-      autos[length(autos)-1].horarioSalida.minutos := horaSalida.minutos;
-      autos[length(autos)-1].fechaSalida := fSalida;
-      autos[length(autos)-1].fechaEntrada := fentrada;
+      setlength(autosIngresados, length(autosIngresados)+1);
+      autosIngresados[length(autosIngresados)-1].patente := pat;
+      autosIngresados[length(autosIngresados)-1].horarioEntrada.horas := horaEntrada.horas;
+      autosIngresados[length(autosIngresados)-1].horarioEntrada.minutos := horaEntrada.minutos;
+      autosIngresados[length(autosIngresados)-1].horarioSalida.horas := horaSalida.horas;
+      autosIngresados[length(autosIngresados)-1].horarioSalida.minutos := horaSalida.minutos;
+      autosIngresados[length(autosIngresados)-1].fechaSalida := fSalida;
+      autosIngresados[length(autosIngresados)-1].fechaEntrada := fentrada;
       inc(cantidadAutos);
+      result := 'Auto cargado correctamente';
     end;
   end;
 end;
 
-function estacionamiento.recaudacionXhoraFecha(f:fecha):longint;
+function estacionamiento.recaudacionXhoraEnXFecha(f:fecha):longint; // falta terminar
 var
   i:integer;
   recaudacion:extended;
@@ -307,57 +292,20 @@ begin
   end;
 
   for i := 0 to cantidadAutos - 1 do begin
-    if autos[i].fechaSalida.compararFechas(f) = IGUAL then
-      recaudacion := recaudacion + getTarifaAuto(i).aPagar;
+    if autosIngresados[i].fechaSalida.compararFechas(f) = IGUAL then
+//      recaudacion := recaudacion + calcularTarifaAuto(i).aPagar;
   end;
 
 end;
 
 function estacionamiento.getStrTarifaAPagar(indiceAuto:integer):string;
-var
-  rec:autoDebePagar;
-  strAux:string;
 begin
-
-  rec := getTarifaAuto(indiceAuto);
-  strAux:='';
-  if (rec.Ocupacion[1] = 0)and (rec.Ocupacion[2] = 0) and( rec.Ocupacion[3] = 0 )and (rec.Ocupacion[4] = 0 )then begin
-    result:= 'El auto no registra tiempo de estacionamiento.';
-    exit;
-  end;
-
-  //si tiene estadias c
-  if (rec.Ocupacion[1] = 1) and (rec.Ocupacion[3] < 3) and (rec.Ocupacion[3] <> 0 ) then
-    strAux:='El auto debe 1 estadía completa y ' + rec.Ocupacion[3].ToString + ' horas por un valor de $' + rec.aPagar.ToString
-  else if (rec.Ocupacion[1] = 1) and (rec.Ocupacion[4] <> 0) and (rec.Ocupacion[3] = 0)  then
-    strAux:='El auto debe 1 estadía completa y ' + rec.Ocupacion[4].ToString + ' minutos por un valor de $' + rec.aPagar.ToString
-  else if (rec.Ocupacion[1] = 1) and (rec.Ocupacion[2] = 1) then
-    strAux:='El auto debe 1 estadía completa y 1 media estadia.'
-  else if (rec.Ocupacion[1] = 1) and (rec.Ocupacion[3] = 0) and (rec.Ocupacion[4] = 0)then
-    strAux:='El auto debe 1 estadía completa'
-  else if (rec.Ocupacion[1] <> 0) and (rec.Ocupacion[3] <> 0) then
-    strAux:='El auto debe '+ rec.Ocupacion[1].ToString + ' estadías completas y ' + rec.Ocupacion[3].ToString + ' horas por un valor de $' + rec.aPagar.ToString
-  else if (rec.Ocupacion[1] <> 0) and (rec.Ocupacion[4] <> 0) then
-    strAux:='El auto debe '+ rec.Ocupacion[1].ToString + ' estadías completas y ' + rec.Ocupacion[4].ToString + ' minutos por un valor de $' + rec.aPagar.ToString
-  else if (rec.Ocupacion[1] <> 0) and (rec.Ocupacion[2] = 1) then
-    strAux:='El auto debe '+ rec.Ocupacion[1].ToString + ' estadías completas y 1 media estadia.'
-  else
-    strAux:='El auto debe '+ rec.Ocupacion[1].ToString + ' estadías completas.';
-  // si tiene me. estadia
-  if rec.Ocupacion[2] = 1 then
-    strAux:= 'El auto debe 1 media estadía.';
-
-  // si tiene solo horas
-  if (rec.Ocupacion[1] = 0) and (rec.Ocupacion[2] = 0) then
-    if (rec.Ocupacion[3] = 0) then
-      strAux:= 'El auto debe ' + rec.Ocupacion[4].ToString + ' minutos por un valor de $' + rec.aPagar.ToString
-    else if rec.Ocupacion[4] <> 0 then
-      strAux:='El auto debe '+ rec.Ocupacion[3].ToString + ' horas y ' + rec.Ocupacion[4].ToString + ' minutos por un valor de $' + rec.aPagar.ToString
-    else if rec.Ocupacion[3] = 1 then
-      strAux:= 'El auto debe 1 hora por un valor de $' + rec.aPagar.ToString
-    else
-      strAux:= 'El auto debe ' + rec.Ocupacion[3].ToString + ' horas por un valor de $' + rec.aPagar.ToString;
-  result:=strAux;
+  calcularTarifaAuto(indiceAuto);
+  result:= 'El auto debe  ' + autosIngresados[indiceAuto].estadia[EC].ToString +
+  ' estadias completas ' + autosIngresados[indiceAuto].estadia[me].ToString +
+  ' medias estadias ' +  autosIngresados[indiceAuto].estadia[hr].ToString +
+  ' horas ' + autosIngresados[indiceAuto].estadia[min].ToString +
+  ' minutos que agregan un valor de $' + floattostr(roundto(autosIngresados[indiceAuto].totalAPagar, -2));
 end;
 
 end.

@@ -4,20 +4,41 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, tadFecha, Vcl.Dialogs, Vcl.StdCtrls, TADEstacionamiento;
+  Vcl.Controls, Vcl.Forms, tadFecha, Vcl.Dialogs, Vcl.StdCtrls, TADEstacionamiento,
+  Vcl.ComCtrls, Vcl.ExtCtrls;
 
 type
+
+  vecPalabrasLinea = array [1..4] of string;
+
   TFormEj6 = class(TForm)
     Memo1: TMemo;
     btnVerTarifaAPagar: TButton;
-    inputPatente: TEdit;
+    inputPatenteVer: TEdit;
     btnVerAutos: TButton;
     inputSetTarifa: TEdit;
     btnDefinirTarifa: TButton;
+    btnCargar: TButton;
+    InputFechaSalidaCargar: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    inputPatenteCargarAuto: TLabeledEdit;
+    InputFechaEntradaCargar: TDateTimePicker;
+    Label3: TLabel;
+    InputHorasEntradaCargar: TLabeledEdit;
+    inputHorasSalidaCargar: TLabeledEdit;
+    inputMinutosEntradaCargar: TEdit;
+    inputMinutosSalidaCargar: TEdit;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    GroupBox1: TGroupBox;
+    Label7: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnDefinirTarifaClick(Sender: TObject);
     procedure btnVerAutosClick(Sender: TObject);
     procedure btnVerTarifaAPagarClick(Sender: TObject);
+    procedure btnCargarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -31,6 +52,48 @@ var
 implementation
 
 {$R *.dfm}
+
+Procedure Parsing(aSS: String; aSep: String; Var aV: vecPalabrasLinea);
+Var I, P,J: Integer;
+Begin
+  // Se asume que <aSS> termina con un carácter separador <aSep>
+  I := 0;
+  P := Pos(aSep, aSS); //Ubica la primer posición del Separador
+  While P > 0 Do Begin // Mientras existan separadores
+    Inc(I);
+    aV[I] := Copy(aSS, 1, P-1); // Copia al array
+    // Se queda con el resto del string a procesar
+    aSS := Copy(aSS, P+1, Length(aSS));
+    // Toma la próxima posición a procesar
+    j := P;
+    P := Pos(aSep, aSS);
+    if P = 0 then
+       aV[I+1]:= Ass;
+  End;
+End;
+
+procedure TFormEj6.btnCargarClick(Sender: TObject);
+var
+  hEntrada,hSalida:horario;
+  fEntrada,fSalida:fecha;
+  strAux, strAux2: string;
+  vStr:vecPalabrasLinea;
+  i:integer;
+begin
+  strAux := '';
+  strAux2 := '';
+  hEntrada.horas:= strtoint(InputHorasEntradaCargar.Text);
+  hEntrada.minutos:= strtoint(InputminutosEntradaCargar.Text);
+  hSalida.horas:= strtoint(InputHorasSalidaCargar.Text);
+  hSalida.minutos:= strtoint(InputminutosSalidaCargar.Text);
+  strAux := dateTimeToStr(InputFechaEntradaCargar.DateTime) + '/';
+  Parsing(strAux, '/', vStr);
+  fEntrada.setFecha(vStr[1].ToInteger,vStr[2].ToInteger,vStr[3].tointeger);
+  strAux := dateTimeToStr(InputFechaSalidaCargar.DateTime) + '/';
+  Parsing(strAux, '/', vStr);
+  fSalida.setFecha(vStr[1].ToInteger,vStr[2].ToInteger,vStr[3].tointeger);
+  memo1.Lines.Add(estacionamiento1.addAuto(inputPatenteCargarAuto.Text,hEntrada, hSalida, fEntrada, fSalida));
+end;
 
 procedure TFormEj6.btnDefinirTarifaClick(Sender: TObject);
 begin
@@ -47,12 +110,12 @@ end;
 
 procedure TFormEj6.btnVerTarifaAPagarClick(Sender: TObject);
 begin
-  if inputPatente.Text = '' then begin
+  if inputPatenteVer.Text = '' then begin
     memo1.Lines.clear;
     memo1.Lines.Add('Por favor ingrese la patente');
   end
   else
-    Estacionamiento1.mostrarDatosAuto(memo1, inputPatente.Text);
+    Estacionamiento1.mostrarDatosAuto(memo1, inputPatenteVer.Text);
 end;
 
 procedure TFormEj6.FormCreate(Sender: TObject);
@@ -63,15 +126,12 @@ begin
   memo1.Clear;
   btnVerTarifaAPagar.enabled:=false;
   btnVerAutos.enabled:=false;
-  horaEntrada.horas := 12;
-  horaEntrada.minutos :=00;
-  horaSalida.horas := 12;
-  horaSalida.minutos := 00;
-  fechaEntrada.setFecha(1,1,2001);
-  fechaSalida.setFecha(2,1,2001);
-  Estacionamiento1.addAuto('1002', horaEntrada,horaSalida,fechaEntrada, fechaSalida );
-  Estacionamiento1.addAuto('EAS102', horaEntrada,horaSalida,fechaEntrada,  fechaSalida);
 
 end;
+
+
+
+
+
 
 end.
