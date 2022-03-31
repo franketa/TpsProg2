@@ -46,8 +46,28 @@ v2: array[0..15] of integer;
 auxiliarTarjeta:string;
 auxiliarIndividuales:string;
 totalSuma:integer;
+entidadEmisora: string;
 
 begin
+      if strToInt(numeroDeTarjeta[1])=4 then
+        entidadEmisora:= 'Visa'
+
+      else if strToInt(numeroDeTarjeta[1])=3 then
+        entidadEmisora:= 'Amex'
+      else if strToInt(numeroDeTarjeta[1])=2  then
+        entidadEmisora:= 'Mastercard'
+      else if strToInt(numeroDeTarjeta[1])=5 then
+        if strToInt(numeroDeTarjeta[2])=5 then
+          entidadEmisora:='Mastercard'
+        else if strToInt(numeroDeTarjeta[2])=1 then
+             entidadEmisora:='Mastercard'
+      else
+      entidadEmisora:= 'Maestro';
+
+
+
+
+
       X:=0;
       C:=0;
       for I :=1 to numeroDeTarjeta.Length do Begin
@@ -67,10 +87,10 @@ begin
       for I := 1 to auxiliarTarjeta.Length do Begin
       totalSuma:=totalSuma+strToInt(AuxiliarTarjeta[i]);
       End;
-      if (totalSuma-1) mod 10 = 0 then
-      result:='true'+auxiliarTarjeta
+      if (totalSuma) mod 10 = 0 then
+      result:='true'+ entidadEmisora
       else
-      result:='false'+auxiliarTarjeta+intToStr(TotalSuma);
+      result:='false'+ auxiliarTarjeta + inttostr(totalSuma);
 
 
 
