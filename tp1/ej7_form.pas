@@ -70,11 +70,15 @@ var
   strAux:string;
   vStr:vecPalabrasLinea;
   fAux:fecha;
+  vE:estadia;
+  extaux:extended;
 begin
   strAux := dateTimeToStr(selectFechaConsulta.DateTime) + '/';
   Parsing(strAux, '/', vStr);
   fAux.setFecha(vStr[1].ToInteger, vStr[2].ToInteger, vStr[3].tointeger);
-  memo1.Lines.Add(Estacionamiento1.recaudacionXfecha(fAux));
+  memo1.Lines.Add('En la fecha ' +  faux.devolverStrFecha + ' se recauradon: ');
+  vE := estacionamiento1.recaudacionXFecha(faux,extaux );
+  memo1.Lines.Add(estacionamiento1.getStrTarifaAPagar(vE, extAux));
 end;
 
 procedure TFormEj7.btnDefinirTarifaClick(Sender: TObject);
@@ -91,17 +95,17 @@ var
   hE,hS:horario;
   fE, fS:fecha;
 begin
-//  hE.horas := 01;
-//  hE.minutos := 0;
-//  hS.horas := 02;
-//  hS.minutos := 21;
-//  fE.setFecha(01,03,2022);
-//  fS.setFecha(01,03,2022);
-//  memo.lines.add(estacionamiento1.addAuto('AEF201', hE, hS, fE, fS));
+  hE.horas := 01;
+  hE.minutos := 0;
+  hS.horas := 02;
+  hS.minutos := 21;
+  fE.setFecha(01,03,2022);
+  fS.setFecha(01,03,2022);
+  memo.lines.add(estacionamiento1.addAuto('AEF201', hE, hS, fE, fS));
   hE.horas := 00;
   hE.minutos := 00;
   hS.horas := 06;
-  hS.minutos := 1;
+  hS.minutos := 00;
   fE.setFecha(01,03,2022);
   fS.setFecha(01,03,2022);
   memo.lines.add(estacionamiento1.addAuto('EAR401', hE, hS, fE, fS));
@@ -121,16 +125,16 @@ begin
   fS.setFecha(02,03,2022);
   memo.lines.add(estacionamiento1.addAuto('LOP421', hE, hS, fE, fS));
   // dia 2 3 2022  1me 1m
-  hE.horas := 01;
+  hE.horas := 00;
   hE.minutos := 00;
   hS.horas := 02;
   hS.minutos := 20;
   fE.setFecha(03,03,2022);
   fS.setFecha(03,03,2022);
   memo.lines.add(estacionamiento1.addAuto('IUY090', hE, hS, fE, fS));
-  hE.horas := 04;
+  hE.horas := 01;
   hE.minutos := 0;
-  hS.horas := 05;
+  hS.horas := 00;
   hS.minutos := 0;
   fE.setFecha(03,03,2022);
   fS.setFecha(03,03,2022);
