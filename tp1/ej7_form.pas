@@ -99,13 +99,13 @@ var
   i:integer;
 begin
   estacionamiento1.ordenarAutosIngresadosXfechaSalidaAscendente;
-  for I := i to estacionamiento1.getCantAutos - 1 do
+  for I := 0 to (estacionamiento1.getCantAutos ) - 1 do
     estacionamiento1.calcularTarifaAuto(i);
 
   assignFile(archivo, 'archivoAutos');
   rewrite(archivo);
 
-  for i := 0 to estacionamiento1.getCantAutos - 1 do begin
+  for i := 0 to (estacionamiento1.getCantAutos) - 1 do begin
     auto :=  estacionamiento1.GetAutoIngresado(i);
     write(archivo, auto );
   end;
@@ -154,10 +154,10 @@ begin
   fE.setFecha(03,03,2022);
   fS.setFecha(03,03,2022);
   memo.lines.add(estacionamiento1.addAuto('IUY090', hE, hS, fE, fS));
-  hE.horas := 01;
+  hE.horas := 00;
   hE.minutos := 0;
   hS.horas := 00;
-  hS.minutos := 0;
+  hS.minutos := 4;
   fE.setFecha(03,03,2022);
   fS.setFecha(03,03,2022);
   memo.lines.add(estacionamiento1.addAuto('EED423', hE, hS, fE, fS));
