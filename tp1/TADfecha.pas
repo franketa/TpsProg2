@@ -142,6 +142,7 @@ begin
   end;
 end;
 
+//f1 respecto de f2
 function fecha.compararFechas(fechaDos:fecha):ResultadoComparacionFechas;
 begin
 

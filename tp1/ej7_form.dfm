@@ -213,6 +213,7 @@ object FormEj7: TFormEj7
     Font.Style = []
     ParentFont = False
     TabOrder = 6
+    OnClick = btnEscribirArchivoClick
   end
   object btnDefinirTarifa: TButton
     Left = 254

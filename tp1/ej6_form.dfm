@@ -137,6 +137,7 @@ object FormEj6: TFormEj6
     Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
+    MaxLength = 6
     ParentFont = False
     ParentShowHint = False
     ShowHint = False
@@ -234,6 +235,7 @@ object FormEj6: TFormEj6
     Font.Height = -17
     Font.Name = 'Tahoma'
     Font.Style = []
+    MaxLength = 6
     ParentFont = False
     TabOrder = 8
   end

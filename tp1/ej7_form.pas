@@ -9,6 +9,8 @@ uses
 
 type
 
+  ArchivoAutos = file of autoIngresado;
+
   vecPalabrasLinea = array [1..4] of string;
 
   TFormEj7 = class(TForm)
@@ -32,6 +34,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure btnDefinirTarifaClick(Sender: TObject);
     procedure btnConsultarFechaDadaClick(Sender: TObject);
+    procedure btnEscribirArchivoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -47,7 +50,7 @@ implementation
 {$R *.dfm}
 
 Procedure Parsing(aSS: String; aSep: String; Var aV: vecPalabrasLinea);
-Var I, P,J: Integer;
+Var I, P: Integer;
 Begin
   // Se asume que <aSS> termina con un carácter separador <aSep>
   I := 0;
@@ -58,7 +61,6 @@ Begin
     // Se queda con el resto del string a procesar
     aSS := Copy(aSS, P+1, Length(aSS));
     // Toma la próxima posición a procesar
-    j := P;
     P := Pos(aSep, aSS);
     if P = 0 then
        aV[I+1]:= Ass;
@@ -88,6 +90,26 @@ begin
     btnConsultarRangoDado.Enabled := true;
   btnConsultarFechaDada.Enabled := true;
   btnEscribirArchivo.Enabled := true;
+end;
+
+procedure TFormEj7.btnEscribirArchivoClick(Sender: TObject);
+var
+  archivo:archivoAutos;
+  auto:autoIngresado;
+  i:integer;
+begin
+  estacionamiento1.ordenarAutosIngresadosXfechaSalidaAscendente;
+  for I := i to estacionamiento1.getCantAutos - 1 do
+    estacionamiento1.calcularTarifaAuto(i);
+
+  assignFile(archivo, 'archivoAutos');
+  rewrite(archivo);
+
+  for i := 0 to estacionamiento1.getCantAutos - 1 do begin
+    auto :=  estacionamiento1.GetAutoIngresado(i);
+    write(archivo, auto );
+  end;
+  closeFile(archivo);
 end;
 
 procedure CrearAutosEnMemoria(memo:Tmemo);

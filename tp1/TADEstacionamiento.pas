@@ -9,6 +9,7 @@ uses
 
 type
 
+
   comparacionHorarios = (horarioanterior, horarioposterior, horariosiguales);
 
   estadias = (EC, ME, HR, MIN);
@@ -21,7 +22,7 @@ type
   end;
 
   autoIngresado = object
-    patente : string;
+    patente : string[6];
     fechaEntrada : fecha;
     fechaSalida : fecha;
     horarioEntrada : horario;
@@ -30,14 +31,17 @@ type
     totalAPagar : extended;
   end;
 
+  ArchivoAutos = file of autoIngresado;
+
   Estacionamiento = object
   private
     autosIngresados : array of AutoIngresado;
     cantidadAutos:integer;
     tarifaPorHora:integer;
     function buscarAuto(pat:string):integer;
-    procedure calcularTarifaAuto(indiceAuto:integer);
   public
+    procedure calcularTarifaAuto(indiceAuto:integer);
+    function getCantAutos:integer;
     function getStrTarifaAPagar(vecE:estadia; ext:extended):string;
     function recaudacionXFecha(f:fecha; var ext:extended):estadia;
     function setFechaSalida(pat:string;d,m,a:integer):integer;
@@ -48,13 +52,24 @@ type
     procedure mostrarDatosAuto(memo:Tmemo;pat:string);
     procedure mostrarDatosTodosLosAutos(memo:Tmemo);
     function recaudacionXRangodeFechas(f1, f2:fecha):string;
-    procedure ordenarAutosIngresadosXfechaAscendente();
+    procedure ordenarAutosIngresadosXfechaSalidaAscendente();
+    function getAutoIngresado(indiceauto:integer):autoIngresado;
   end;
 
 const
   horasEstadias : array [EC.. ME] of integer = (6, 3);
 
 implementation
+
+function estacionamiento.getAutoIngresado(indiceauto:integer):autoIngresado;
+begin
+  result := autosIngresados[indiceauto];
+end;
+
+function estacionamiento.getCantAutos:integer;
+begin
+  result := cantidadAutos;
+end;
 
 function Estacionamiento.setFechaSalida(pat:string;d,m,a:integer):integer;
 var
@@ -388,12 +403,18 @@ begin
   result := str;
 end;
 
-procedure ordenarAutosIngresadosXfechaAscendente();
+procedure estacionamiento.ordenarAutosIngresadosXfechaSalidaAscendente();
 var
   i:integer;
   autoAux:AutoIngresado;
 begin
-
+  for I := cantidadAutos - 1 downto 1 do begin
+    if (autosIngresados[i].fechaSalida.compararFechas(autosIngresados[i -1].fechaSalida) = posterior) then begin
+      autoAux := autosIngresados[i];
+      autosIngresados[i] := autosIngresados[i-1];
+      autosIngresados[i-1] := autoAux;
+    end;
+  end;
 end;
 
 end.
