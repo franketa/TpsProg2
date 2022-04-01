@@ -15,8 +15,8 @@ object FormEj7: TFormEj7
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 8
-    Top = 263
+    Left = 16
+    Top = 275
     Width = 58
     Height = 19
     Caption = 'Desde...'
@@ -28,8 +28,8 @@ object FormEj7: TFormEj7
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 118
-    Top = 263
+    Left = 126
+    Top = 275
     Width = 54
     Height = 19
     Caption = 'Hasta...'
@@ -55,7 +55,7 @@ object FormEj7: TFormEj7
   end
   object Label4: TLabel
     Left = 8
-    Top = 238
+    Top = 250
     Width = 168
     Height = 19
     Caption = 'Consultar rango de d'#237'as'
@@ -120,9 +120,9 @@ object FormEj7: TFormEj7
     ParentFont = False
     TabOrder = 0
   end
-  object DateTimePicker1: TDateTimePicker
-    Left = 8
-    Top = 282
+  object selectFechaDesde: TDateTimePicker
+    Left = 16
+    Top = 294
     Width = 104
     Height = 27
     Date = 44621.000000000000000000
@@ -137,9 +137,9 @@ object FormEj7: TFormEj7
     ParentFont = False
     TabOrder = 1
   end
-  object DateTimePicker2: TDateTimePicker
-    Left = 118
-    Top = 282
+  object selectFechaHasta: TDateTimePicker
+    Left = 126
+    Top = 294
     Width = 115
     Height = 27
     Date = 44623.000000000000000000
@@ -199,6 +199,7 @@ object FormEj7: TFormEj7
     Font.Style = []
     ParentFont = False
     TabOrder = 5
+    OnClick = btnConsultarRangoDadoClick
   end
   object btnEscribirArchivo: TButton
     Left = 254

@@ -51,7 +51,7 @@ type
     function addAuto(pat:string;horaEntrada, horaSalida:horario;fentrada,fSalida:fecha):string;
     procedure mostrarDatosAuto(memo:Tmemo;pat:string);
     procedure mostrarDatosTodosLosAutos(memo:Tmemo);
-    function recaudacionXRangodeFechas(f1, f2:fecha):string;
+    function recaudacionXRangodeFechas(f1, f2:fecha;var ext:extended):estadia;
     procedure ordenarAutosIngresadosXfechaSalidaAscendente();
     function getAutoIngresado(indiceauto:integer):autoIngresado;
   end;
@@ -356,23 +356,53 @@ begin
 
 end;
 
-function Estacionamiento.recaudacionXRangodeFechas(f1, f2:fecha):string;
+function Estacionamiento.recaudacionXRangodeFechas(f1, f2:fecha;var ext:extended):estadia;
 var
   fActual:fecha;
   Vresultado:estadia;
   j:estadias;
   primerIndice,i:integer;
+  auxE:extended;
 begin
 
-  if f1.compararFechas(f2)=posterior then begin
+  if f1.compararFechas(f2)=igual then begin
+    Vresultado := recaudacionXFecha(f1, auxE);
+    ext := auxE;
+    result:=Vresultado;
+    exit;
+  end;
+
+
+  auxE:=0;
+
+  if cantidadAutos = 0 then begin
+    for j := ec to min do
+    Vresultado[j] := -1;
+    exit;
+  end;
+
+  for j := ec to min do
+    Vresultado[j] := 0;
+
+  if f1.compararFechas(f2)= anterior then begin
     fActual:=f1;
     f1:= f2;
     f2:=fActual;
   end;
 
+  ordenarAutosIngresadosXfechaSalidaAscendente;
+
+  // busco primera ocurrencia
   i := 0;
-  while not (f1.compararFechas(f2) = igual) do begin
-    calcularTarifaAuto(i);
+  primerIndice := -1;
+  while (primerIndice = -1) or (i > cantidadAutos -1) do begin
+    if autosIngresados[i].fechaSalida.compararFechas(f1) = igual then
+      primerIndice := i;
+    inc(i)
+  end;
+
+  while (not (f1.compararFechas(f2) = anterior)) and (primerIndice < cantidadAutos) do begin
+    calcularTarifaAuto(primerIndice);
     Vresultado[ec] := Vresultado[ec] + autosIngresados[primerIndice].estadiaAuto[ec];
     Vresultado[me] := Vresultado[me] + autosIngresados[primerIndice].estadiaAuto[me];
     Vresultado[hr] := Vresultado[hr] + autosIngresados[primerIndice].estadiaAuto[hr];
@@ -380,6 +410,13 @@ begin
     inc(primerIndice);
     f1.sumarDias(1);
   end;
+
+  auxE := roundto(Vresultado[hr] * tarifaPorHora + ( Vresultado[min] / 10 * (tarifaPorHora / 6) ),-2);
+  if ( Vresultado[ec] = 0) and ( Vresultado[me] = 0) and ( Vresultado[hr] = 0) and ( Vresultado[min]<>0) then
+      auxE := tarifaPorHora;
+
+  ext:=auxE;
+  result := Vresultado;
 
 end;
 
