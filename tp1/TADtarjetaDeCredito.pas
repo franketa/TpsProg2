@@ -5,17 +5,23 @@ interface
 uses SysUtils;
 
 type
+  Tlimites=record
+   limiteUnPago: real;
+   limiteCuotas: real;
+  end;
   TarjetaDeCredito = object
     private
        numeroDeTarjeta : string;
        fechaDeVencimientoMes: integer;
        fechaDeVencimientoAño: integer;
-       limiteUnPago: real;
-       limiteCuotas: real;
+       esValida:boolean;
+       limites:Tlimites;
     public
-      function validarNro():string;
+      function validarNro():boolean;
       procedure setTarjeta(z:string);
       function mostrarTarjeta():string;
+      function mostrarLimites():Tlimites;
+      function entidadEmisora():string  ;
   end;
 
 
@@ -35,38 +41,16 @@ begin
   numeroDeTarjeta:=z;
 end;
 
-function TarjetaDeCredito.validarNro(): string;
+function TarjetaDeCredito.validarNro(): boolean;
 var
 I,X,C:integer;
 auxChar: string;
-v1: array[0..7] of integer;
-vDuplicados: array[0..7] of integer;
-vIndividuales: array[0..7] of integer;
 v2: array[0..15] of integer;
 auxiliarTarjeta:string;
-auxiliarIndividuales:string;
-totalSuma:integer;
-entidadEmisora: string;
+totalSuma: integer;
+
 
 begin
-      if strToInt(numeroDeTarjeta[1])=4 then
-        entidadEmisora:= 'Visa'
-
-      else if strToInt(numeroDeTarjeta[1])=3 then
-        entidadEmisora:= 'Amex'
-      else if strToInt(numeroDeTarjeta[1])=2  then
-        entidadEmisora:= 'Mastercard'
-      else if strToInt(numeroDeTarjeta[1])=5 then
-        if strToInt(numeroDeTarjeta[2])=5 then
-          entidadEmisora:='Mastercard'
-        else if strToInt(numeroDeTarjeta[2])=1 then
-             entidadEmisora:='Mastercard'
-      else
-      entidadEmisora:= 'Maestro';
-
-
-
-
 
       X:=0;
       C:=0;
@@ -88,22 +72,43 @@ begin
       totalSuma:=totalSuma+strToInt(AuxiliarTarjeta[i]);
       End;
       if (totalSuma) mod 10 = 0 then
-      result:='true'+ entidadEmisora
+      result:= True
       else
-      result:='false'+ auxiliarTarjeta + inttostr(totalSuma);
-
-
-
-
-
-
-
-
-
-
-
-
+      result:=False;
 end;
+
+function tarjetaDeCredito.entidadEmisora(): string;
+var
+emisor:string;
+begin
+
+
+if strToInt(numeroDeTarjeta[1])=4 then
+        emisor:= 'Visa'
+
+      else if strToInt(numeroDeTarjeta[1])=3 then begin
+        emisor:= 'Amex'
+      end
+      else if strToInt(numeroDeTarjeta[1])=2  then begin
+        emisor:= 'Mastercard'
+      end
+      else if strToInt(numeroDeTarjeta[1])=5 then begin
+        if strToInt(numeroDeTarjeta[2])=5 then
+          emisor:='Mastercard'
+        else if strToInt(numeroDeTarjeta[2])=1 then
+             emisor:='Mastercard'
+      end
+      else
+      emisor:= 'Maestro';
+end;
+
+function tarjetaDeCredito.mostrarLimites():Tlimites;
+begin
+  if esValida then
+
+  result:=limites
+end;
+
 
 end.
 
