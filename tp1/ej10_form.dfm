@@ -1,7 +1,7 @@
-object Form1: TForm1
+object Formej10: TFormej10
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'Form10'
   ClientHeight = 433
   ClientWidth = 622
   Color = clBtnFace
@@ -10,6 +10,8 @@ object Form1: TForm1
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  OldCreateOrder = True
+  Position = poScreenCenter
   PixelsPerInch = 96
   TextHeight = 15
   object Button1: TButton

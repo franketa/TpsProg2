@@ -11,6 +11,7 @@ object Formej9: TFormej9
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -145,6 +146,7 @@ object Formej9: TFormej9
     Height = 58
     Caption = 'Ingresar'
     TabOrder = 12
+    OnClick = btnIngresarClick
   end
   object btnCobrar: TButton
     Left = 110
@@ -153,6 +155,7 @@ object Formej9: TFormej9
     Height = 56
     Caption = 'Cobrar'
     TabOrder = 13
+    OnClick = btnCobrarClick
   end
   object inputMontoACobrar: TLabeledEdit
     Left = 110
@@ -306,6 +309,7 @@ object Formej9: TFormej9
     Height = 57
     Caption = 'Cerrar'
     TabOrder = 26
+    OnClick = btnCerrarClick
   end
   object btnVerSaldo: TButton
     Left = 336

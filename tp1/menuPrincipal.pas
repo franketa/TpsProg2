@@ -9,15 +9,13 @@ uses
 type
   TFormMenuPrincipal = class(TForm)
     btnej6: TButton;
-    btnej1: TButton;
     btnej7: TButton;
     btnej9: TButton;
-    Button1: TButton;
+    btnej10: TButton;
     procedure btnej7Click(Sender: TObject);
     procedure btnej6Click(Sender: TObject);
-    procedure btnej1Click(Sender: TObject);
     procedure btnej9Click(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure btnej10Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -31,11 +29,6 @@ var
 implementation
 
 {$R *.dfm}
-
-procedure TFormMenuPrincipal.btnej1Click(Sender: TObject);
-begin
-  formej1.Show
-end;
 
 procedure TFormMenuPrincipal.btnej6Click(Sender: TObject);
 begin
@@ -52,7 +45,7 @@ begin
   formej9.Show;
 end;
 
-procedure TFormMenuPrincipal.Button1Click(Sender: TObject);
+procedure TFormMenuPrincipal.btnej10Click(Sender: TObject);
 begin
   formej10.Show;
 end;

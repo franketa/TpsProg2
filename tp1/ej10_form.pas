@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, TADTarjetaDeCredito;
 
 type
-  TForm1 = class(TForm)
+  TFormej10 = class(TForm)
     EditNroTarjeta: TEdit;
     Memo1: TMemo;
     Button2: TButton;
@@ -19,7 +19,7 @@ type
   end;
 
 var
-  formej10: TForm1;
+  formej10: TFormej10;
   tarjeta1:TarjetaDeCredito;
 
 
@@ -27,7 +27,7 @@ implementation
 
 {$R *.dfm}
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TFormej10.Button2Click(Sender: TObject);
 begin
   tarjeta1.setTarjeta(editnrotarjeta.Text);
   memo1.Lines.add(tarjeta1.mostrarTarjeta());
