@@ -73,7 +73,7 @@ begin
 
   esValida := false;
 
-  if length(numeroDeTarjeta) < 16 then exit;
+  if length(numeroDeTarjeta) <> 16 then exit;
 
   acum := 0;
   for I := length(numeroDeTarjeta) downto 1 do begin
@@ -84,8 +84,6 @@ begin
   end;
   if acum mod 10 = 0 then
     esValida := true
-
-
 end;
 
 procedure tarjetaDeCredito.setEntidadEmisora();
