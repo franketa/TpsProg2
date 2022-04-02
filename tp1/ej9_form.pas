@@ -13,7 +13,6 @@ type
     UpDown1: TUpDown;
     UpDown2: TUpDown;
     UpDown3: TUpDown;
-    UpDown4: TUpDown;
     UpDown5: TUpDown;
     UpDown6: TUpDown;
     UpDown7: TUpDown;
@@ -27,7 +26,6 @@ type
     inputMonUn: TLabeledEdit;
     InputMonDos: TLabeledEdit;
     inputMonCinco: TLabeledEdit;
-    inputMonDiez: TLabeledEdit;
     inputBilDiez: TLabeledEdit;
     inputBilVeinte: TLabeledEdit;
     inputBilCincuenta: TLabeledEdit;
@@ -44,6 +42,7 @@ type
     procedure btnIngresarClick(Sender: TObject);
     procedure btnCobrarClick(Sender: TObject);
     procedure btnCerrarClick(Sender: TObject);
+    procedure btnVerSaldoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -107,6 +106,11 @@ begin
   vBilletesIngreso[B1000] := strtoint(inputBilMil.Text);
   caja1.Cargar(vBilletesIngreso);
   memo1.Lines.Add('Ingreso exitoso');
+end;
+
+procedure TFormej9.btnVerSaldoClick(Sender: TObject);
+begin
+  memo1.Lines.Add('Tu saldo es: ' + floatToStr(caja1.getSaldo()));
 end;
 
 end.

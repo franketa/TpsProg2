@@ -24,6 +24,6 @@ begin
   Application.CreateForm(TFormEj1, FormEj1);
   Application.CreateForm(TFormEj7, FormEj7);
   Application.CreateForm(TFormej9, Formej9);
-  Application.CreateForm(TForm1, Formej10);
+  Application.CreateForm(TFormej10, Formej10);
   Application.Run;
 end.

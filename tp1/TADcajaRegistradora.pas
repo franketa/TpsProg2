@@ -18,6 +18,7 @@ type
       function Saldo(billSaldo:arraybilletes):real;
       function DarVuelto( var billetesVuelto , billetesPago:arraybilletes;pago:real):TError;
       function CerrarCaja():string;
+      function getSaldo():real;
   end;
 
 const
@@ -26,6 +27,11 @@ const
 
 
 implementation
+
+function caja.getSaldo():real;
+begin
+  result:= saldo(billetesCaja);
+end;
 
 procedure caja.Cargar(billACargar: arrayBilletes);
 var

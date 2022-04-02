@@ -11,7 +11,9 @@ type
     EditNroTarjeta: TEdit;
     Memo1: TMemo;
     Button2: TButton;
+    Label1: TLabel;
     procedure Button2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -29,12 +31,16 @@ implementation
 
 procedure TFormej10.Button2Click(Sender: TObject);
 begin
-  tarjeta1.setTarjeta(editnrotarjeta.Text);
   memo1.Lines.add(tarjeta1.mostrarTarjeta());
-  memo1.Lines.add(tarjeta1.validarNro());
 end;
 
 
 
+
+procedure TFormej10.FormCreate(Sender: TObject);
+begin
+  tarjeta1.setTarjeta('52122000');
+
+end;
 
 end.

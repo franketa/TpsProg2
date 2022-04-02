@@ -2,7 +2,7 @@ object Formej9: TFormej9
   Left = 0
   Top = 0
   Caption = 'Formej9'
-  ClientHeight = 520
+  ClientHeight = 474
   ClientWidth = 673
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -30,14 +30,14 @@ object Formej9: TFormej9
   end
   object Label3: TLabel
     Left = 110
-    Top = 435
+    Top = 389
     Width = 54
     Height = 13
     Caption = 'Cerrar caja'
   end
   object Label4: TLabel
-    Left = 98
-    Top = 135
+    Left = 110
+    Top = 141
     Width = 6
     Height = 13
     Caption = '$'
@@ -46,7 +46,7 @@ object Formej9: TFormej9
     Left = 336
     Top = 8
     Width = 329
-    Height = 440
+    Height = 394
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
@@ -75,69 +75,61 @@ object Formej9: TFormej9
     Associate = inputMonCinco
     TabOrder = 3
   end
-  object UpDown4: TUpDown
+  object UpDown5: TUpDown
     Left = 71
     Top = 177
     Width = 16
     Height = 21
-    Associate = inputMonDiez
+    Associate = inputBilDiez
     TabOrder = 4
   end
-  object UpDown5: TUpDown
+  object UpDown6: TUpDown
     Left = 71
-    Top = 222
+    Top = 225
     Width = 16
     Height = 21
-    Associate = inputBilDiez
+    Associate = inputBilVeinte
     TabOrder = 5
   end
-  object UpDown6: TUpDown
+  object UpDown7: TUpDown
     Left = 71
     Top = 270
     Width = 16
     Height = 21
-    Associate = inputBilVeinte
+    Associate = inputBilCincuenta
     TabOrder = 6
   end
-  object UpDown7: TUpDown
+  object UpDown8: TUpDown
     Left = 71
     Top = 315
     Width = 16
     Height = 21
-    Associate = inputBilCincuenta
-    TabOrder = 7
-  end
-  object UpDown8: TUpDown
-    Left = 71
-    Top = 360
-    Width = 16
-    Height = 21
     Associate = inputBilCien
-    TabOrder = 8
+    TabOrder = 7
   end
   object UpDown9: TUpDown
     Left = 71
-    Top = 403
+    Top = 358
     Width = 16
     Height = 21
     Associate = inputBilDoscientos
-    TabOrder = 9
+    TabOrder = 8
   end
   object UpDown10: TUpDown
     Left = 71
-    Top = 446
+    Top = 401
     Width = 16
     Height = 21
     Associate = inputBilQuinientos
-    TabOrder = 10
+    TabOrder = 9
   end
   object UpDown11: TUpDown
     Left = 71
-    Top = 489
+    Top = 444
     Width = 16
     Height = 21
     Associate = inputBilMil
-    TabOrder = 11
+    TabOrder = 10
   end
   object btnIngresar: TButton
     Left = 110
@@ -145,7 +137,7 @@ object Formej9: TFormej9
     Width = 202
     Height = 58
     Caption = 'Ingresar'
-    TabOrder = 12
+    TabOrder = 11
     OnClick = btnIngresarClick
   end
   object btnCobrar: TButton
@@ -154,20 +146,20 @@ object Formej9: TFormej9
     Width = 202
     Height = 56
     Caption = 'Cobrar'
-    TabOrder = 13
+    TabOrder = 12
     OnClick = btnCobrarClick
   end
   object inputMontoACobrar: TLabeledEdit
-    Left = 110
-    Top = 133
-    Width = 202
+    Left = 122
+    Top = 138
+    Width = 104
     Height = 21
     EditLabel.Width = 77
     EditLabel.Height = 13
     EditLabel.Caption = 'Monto a cobrar:'
     EditLabel.Layout = tlBottom
     NumbersOnly = True
-    TabOrder = 14
+    TabOrder = 13
     Text = '0'
   end
   object inputMonUn: TLabeledEdit
@@ -179,7 +171,7 @@ object Formej9: TFormej9
     EditLabel.Height = 13
     EditLabel.Caption = 'Monedas $1'
     NumbersOnly = True
-    TabOrder = 15
+    TabOrder = 14
     Text = '0'
   end
   object InputMonDos: TLabeledEdit
@@ -191,7 +183,7 @@ object Formej9: TFormej9
     EditLabel.Height = 13
     EditLabel.Caption = 'Monedas $2'
     NumbersOnly = True
-    TabOrder = 16
+    TabOrder = 15
     Text = '0'
   end
   object inputMonCinco: TLabeledEdit
@@ -203,120 +195,109 @@ object Formej9: TFormej9
     EditLabel.Height = 13
     EditLabel.Caption = 'Monedas $5'
     NumbersOnly = True
-    TabOrder = 17
-    Text = '0'
-  end
-  object inputMonDiez: TLabeledEdit
-    Left = 16
-    Top = 177
-    Width = 55
-    Height = 21
-    EditLabel.Width = 64
-    EditLabel.Height = 13
-    EditLabel.Caption = 'Monedas $10'
-    NumbersOnly = True
-    TabOrder = 18
+    TabOrder = 16
     Text = '0'
   end
   object inputBilDiez: TLabeledEdit
     Left = 16
-    Top = 222
+    Top = 177
     Width = 55
     Height = 21
     EditLabel.Width = 54
     EditLabel.Height = 13
     EditLabel.Caption = 'Billetes $10'
     NumbersOnly = True
-    TabOrder = 19
+    TabOrder = 17
     Text = '0'
   end
   object inputBilVeinte: TLabeledEdit
     Left = 16
-    Top = 270
+    Top = 225
     Width = 55
     Height = 21
     EditLabel.Width = 54
     EditLabel.Height = 13
     EditLabel.Caption = 'Billetes $20'
     NumbersOnly = True
-    TabOrder = 20
+    TabOrder = 18
     Text = '0'
   end
   object inputBilCincuenta: TLabeledEdit
     Left = 16
-    Top = 315
+    Top = 270
     Width = 55
     Height = 21
     EditLabel.Width = 54
     EditLabel.Height = 13
     EditLabel.Caption = 'Billetes $50'
     NumbersOnly = True
-    TabOrder = 21
+    TabOrder = 19
     Text = '0'
   end
   object inputBilCien: TLabeledEdit
     Left = 16
-    Top = 360
+    Top = 315
     Width = 55
     Height = 21
     EditLabel.Width = 60
     EditLabel.Height = 13
     EditLabel.Caption = 'Billetes $100'
     NumbersOnly = True
-    TabOrder = 22
+    TabOrder = 20
     Text = '0'
   end
   object inputBilDoscientos: TLabeledEdit
     Left = 16
-    Top = 403
+    Top = 358
     Width = 55
     Height = 21
     EditLabel.Width = 60
     EditLabel.Height = 13
     EditLabel.Caption = 'Billetes $200'
     NumbersOnly = True
-    TabOrder = 23
+    TabOrder = 21
     Text = '0'
   end
   object inputBilQuinientos: TLabeledEdit
     Left = 16
-    Top = 446
+    Top = 401
     Width = 55
     Height = 21
     EditLabel.Width = 60
     EditLabel.Height = 13
     EditLabel.Caption = 'Billetes $500'
     NumbersOnly = True
-    TabOrder = 24
+    TabOrder = 22
     Text = '0'
   end
   object inputBilMil: TLabeledEdit
     Left = 16
-    Top = 489
+    Top = 444
     Width = 55
     Height = 21
     EditLabel.Width = 66
     EditLabel.Height = 13
     EditLabel.Caption = 'Billetes $1000'
     NumbersOnly = True
-    TabOrder = 25
+    TabOrder = 23
     Text = '0'
   end
   object btnCerrar: TButton
     Left = 110
-    Top = 454
+    Top = 408
     Width = 202
     Height = 57
     Caption = 'Cerrar'
-    TabOrder = 26
+    TabOrder = 24
     OnClick = btnCerrarClick
   end
   object btnVerSaldo: TButton
     Left = 336
-    Top = 454
+    Top = 408
     Width = 329
     Height = 58
     Caption = 'Ver saldo'
-    TabOrder = 27
+    TabOrder = 25
+    OnClick = btnVerSaldoClick
   end
 end

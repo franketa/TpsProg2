@@ -12,38 +12,46 @@ object Formej10: TFormej10
   Font.Style = []
   OldCreateOrder = True
   Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 15
+  object Label1: TLabel
+    Left = 8
+    Top = 16
+    Width = 137
+    Height = 15
+    Caption = 'Mostrar datos de la tarjeta'
+  end
   object Button1: TButton
-    Left = 72
-    Top = 72
+    Left = 8
+    Top = 144
     Width = 75
     Height = 25
     Caption = 'Button1'
     TabOrder = 0
   end
   object EditNroTarjeta: TEdit
-    Left = 176
-    Top = 73
+    Left = 89
+    Top = 145
     Width = 121
     Height = 23
     TabOrder = 1
   end
   object Memo1: TMemo
-    Left = 312
-    Top = 272
-    Width = 185
-    Height = 89
+    Left = 272
+    Top = 8
+    Width = 342
+    Height = 417
     Lines.Strings = (
       'Memo1')
     TabOrder = 2
   end
   object Button2: TButton
-    Left = 128
-    Top = 176
-    Width = 75
-    Height = 25
-    Caption = 'Mostrar Tarjeta'
+    Left = 160
+    Top = 8
+    Width = 97
+    Height = 33
+    Caption = 'Mostrar '
     TabOrder = 3
     OnClick = Button2Click
   end
