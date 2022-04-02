@@ -14,7 +14,6 @@ type
   end;
 
   valoresLimites = array [visa .. maestro] of real;
-  valoresLimitesR = array [visa .. maestro] of Tlimites;
 
   TarjetaDeCredito = object
     private
@@ -37,9 +36,9 @@ const
 
   limitesDefault : array [visa .. maestro] of real = (80000, 80000, 90000, 80000);
   limitesDefaultCuotas : array [visa .. maestro] of real = (100000, 100000, 120000, 110000);
-  DescuentolimitesUnpago :  valoresLimites = (80, 80, 100, 100);
-  DescuentolimitesHasta6pagos :  valoresLimites = (90, 90, 90, 90);
-  DescuentolimitesMas6pagos :  valoresLimites = (70, 70, 70, 70);
+  porcentajeDescuentolimitesUnpago :  valoresLimites = (80, 80, 100, 100);
+  porcentajeDescuentolimitesHasta6pagos :  valoresLimites = (90, 90, 90, 90);
+  porcentajeDescuentolimitesMas6pagos :  valoresLimites = (70, 70, 70, 70);
 
 implementation
 
@@ -48,11 +47,12 @@ implementation
 function TarjetaDeCredito.autorizarcompra(monto:real;cuotas:integer):boolean;
 var
   i:emisor;
-  limiteAux:Tlimites;
   flag:boolean;
 begin
 
   flag:=false;
+
+
 
 
 end;
