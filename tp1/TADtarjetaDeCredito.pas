@@ -2,14 +2,15 @@ unit TADtarjetaDeCredito;
 
 interface
 
-uses SysUtils, typinfo;
+uses SysUtils, typinfo, TADFecha;
 
 type
 
-  emisor = (visa, mastercard, amex, maestro);
+  emisor = (Visa, Mastercard, Amex, Maestro);
 
   vNumInn = array [1.. 13] of integer;
 
+  vecFecha = array [1..3] of string;
 
   Tlimites=record
    limiteUnPago: real;
@@ -23,19 +24,22 @@ type
     private
        numeroDeTarjeta : string;
        emisorTarjeta:emisor;
-       fechaDeVencimientoMes: integer;
-       fechaDeVencimientoAño: integer;
+       fechaDeVencimiento:fecha;
        esValida:boolean;
        limites:Tlimites;
+       procedure reducirLimiteCredito(monto:real; cuotas:integer);
+       function estaVencida(fechaActual:fecha):boolean;
+       procedure validarTarjeta();
     public
       //function validarNro():boolean;
       //function entidadEmisora():emisor;
-      procedure setTarjeta(z:string);
-      procedure validarTarjeta();
+      procedure setTarjeta(z:string;vencimiento:Fecha);
       procedure setEntidadEmisora();
       function mostrarTarjeta():string;
-      function mostrarLimites():Tlimites;
-      function autorizarcompra(monto:real;cuotas:integer):boolean;
+      function mostrarLimites():string;
+      function validarCompra(monto:real;cuotas:integer;fechaCompra:fecha):string;
+
+
 end;
 
 const
@@ -55,7 +59,7 @@ implementation
 
 { TarjetaDeCredito }
 
-procedure TarjetaDeCredito.setTarjeta(z: string);
+procedure TarjetaDeCredito.setTarjeta(z: string;vencimiento:Fecha);
 begin
   numeroDeTarjeta:=z;
   validarTarjeta;
@@ -63,6 +67,7 @@ begin
     setEntidadEmisora;
     limites.limiteUnPago := limitesDefault[emisorTarjeta];
     limites.limiteCuotas := limitesDefaultCuotas[emisorTarjeta];
+    fechaDeVencimiento := vencimiento;
   end;
 end;
 
@@ -114,28 +119,63 @@ begin
   if esValida then begin
     aux:= 'Tarjeta Nº ' + numeroDeTarjeta + sLineBreak;
     aux := aux + 'Emisor: ' + GetEnumName(typeInfo(emisor), Ord(emisorTarjeta)) + sLineBreak;
-    aux := aux + 'Vencimiento: ' + fechaDeVencimientoMes.ToString + '/' + fechaDeVencimientoAño.ToString + sLineBreak;
+    aux := aux + 'Vencimiento: ' + fechaDeVencimiento.devolverStrFecha + sLineBreak;
   end
   else aux := 'La tarjeta '+ numeroDeTarjeta +' no es válida ';
     result := aux;
 end;
 
-function tarjetaDeCredito.mostrarLimites():Tlimites;
+function tarjetaDeCredito.mostrarLimites():string;
 begin
-  if esValida then
-
-  result:=limites
+  if esValida then result := 'Limite en un pago disponible: ' +
+    floatTostr(limites.limiteUnPago) + sLineBreak + 'Limite en cuotas disponible: '+
+    floatTostr(limites.limiteCuotas)
+  else result:= 'La tarjeta no es válida.'
 end;
 
-function TarjetaDeCredito.autorizarcompra(monto:real;cuotas:integer):boolean;
+function tarjetaDeCredito.estaVencida(fechaActual:fecha):boolean;
+begin
+  result := true;
+  if fechaActual.compararFechas(fechaDeVencimiento) = posterior then result := false;
+end;
+
+function TarjetaDeCredito.validarCompra(monto:real;cuotas:integer;fechaCompra:fecha):string;
 var
   i:emisor;
   flag:boolean;
 begin
 
   flag:=false;
+  if (monto > 0) and not estaVencida(fechaCompra) then
+    if cuotas = 1 then begin
+      if monto <= limites.limiteUnPago then
+        flag := true;
+    end
+    else
+      if monto <= limites.limiteCuotas then
+        flag := true;
 
+  if flag then begin
+    reducirLimiteCredito(monto, cuotas);
+    result := 'La compra ha sido validada correctamente';
+  end else
+    result := 'La compra no ha sido validada'
 end;
+
+procedure TarjetaDeCredito.reducirLimiteCredito(monto:real; cuotas:integer);
+var
+  i:emisor;
+  cuotasRestantes:integer;
+begin
+  cuotasRestantes := cuotas - 1;
+  limites.limiteUnPago := limites.limiteUnPago - (monto * porcentajeDescuentolimitesUnpago[emisorTarjeta] / 100);
+  while cuotasRestantes > 0 do begin
+    if cuotasRestantes > 6 then
+      limites.limiteCuotas := limites.limiteCuotas - (monto * porcentajeDescuentolimitesMas6pagos[emisorTarjeta] / 100);
+    limites.limiteCuotas := limites.limiteCuotas - (monto * porcentajeDescuentolimitesHasta6pagos[emisorTarjeta] / 100);
+  end;
+end;
+
 
 //function TarjetaDeCredito.validarNro(): boolean;
 //var
