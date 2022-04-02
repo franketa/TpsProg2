@@ -73,7 +73,7 @@ begin
     str := datetostr(inputFechaCompra.Date) + '/';
     Parsing(str, '/', vF);
     fAux.setFecha(vF[1].ToInteger, vF[2].ToInteger, vF[3].tointeger);
-    tarjeta1.validarCompra(strToFLoat(inputMontoCompra.text),strToInt(inputCantCuotas.Text),fAux);
+    memo1.Lines.Add(tarjeta1.validarCompra(strToFLoat(inputMontoCompra.text),strToInt(inputCantCuotas.Text),fAux));
 
 
 end;
