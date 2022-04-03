@@ -43,8 +43,8 @@ type
 end;
 
 const
-    limitesDefault : array [visa .. maestro] of real = (100, 100, 100, 100);
-  limitesDefaultCuotas : array [visa .. maestro] of real = (100, 100, 100, 100);
+    limitesDefault : array [visa .. maestro] of real = (200, 200, 200, 200);
+  limitesDefaultCuotas : array [visa .. maestro] of real = (200, 200, 200, 200);
 //  limitesDefault : array [visa .. maestro] of real = (80000, 80000, 90000, 80000);
 //  limitesDefaultCuotas : array [visa .. maestro] of real = (100000, 100000, 120000, 110000);
   porcentajeDescuentolimitesUnpago :  valoresLimites = (80, 100, 80, 100);
@@ -170,7 +170,6 @@ var
 begin
 
   cuotasRestantes := cuotas - 1;
-  monto := monto / cuotas;
   limites.limiteUnPago := limites.limiteUnPago - ((monto / cuotas)* porcentajeDescuentolimitesUnpago[emisorTarjeta] / 100);
   while cuotasRestantes > 0 do begin
     if cuotasRestantes > 6 then
