@@ -96,9 +96,6 @@ begin
   memo1.Lines.add(tarjeta1.mostrarTarjeta());
 end;
 
-
-
-
 procedure TFormej10.btnMostrarLimitesClick(Sender: TObject);
 begin
   memo1.Lines.Add(tarjeta1.mostrarLimites);
