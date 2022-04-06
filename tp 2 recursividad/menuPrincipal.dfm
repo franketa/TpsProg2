@@ -58,4 +58,13 @@ object Form1: TForm1
     TabOrder = 4
     OnClick = Button5Click
   end
+  object Button6: TButton
+    Left = 56
+    Top = 136
+    Width = 75
+    Height = 25
+    Caption = 'Ejercicio 7'
+    TabOrder = 5
+    OnClick = Button6Click
+  end
 end
