@@ -107,6 +107,10 @@
             <Form>Formej4</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="ej5.pas">
+            <Form>Formej5</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

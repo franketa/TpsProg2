@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 type
-  TForm2 = class(TForm)
+  TFormej4 = class(TForm)
     Button1: TButton;
     Memo1: TMemo;
     Edit1: TEdit;
@@ -20,7 +20,7 @@ type
   end;
 
 var
-  formej4: TForm2;
+  formej4: TFormej4;
 
 implementation
 
@@ -29,24 +29,23 @@ implementation
 function restaSucesiva(n1,n2:integer):real;
 var
   i, resultado:integer;
+  strAux:string;
 begin
   resultado := 0;
   i := 1;
 
-  if n1 = n2 then begin
-    result := 1;
-    exit;
-  end;
-
   if n2 = 0 then begin
+    result := 0;
+    exit;
+  end else if n1 = n2 then begin
     result := 1;
     exit;
   end;
 
-  if (n2 > n1)  then begin
-    result := resultado ;
-    exit;
+  if (n1 < n2) then begin
+    result := resultado;
   end;
+
 
   inc(resultado);
 
@@ -56,7 +55,7 @@ end;
 
 
 
-procedure TForm2.Button1Click(Sender: TObject);
+procedure TFormej4.Button1Click(Sender: TObject);
 begin
   memo1.Lines.Add(floatToStr(restaSucesiva(strtoint(edit1.Text), strtoint(edit2.Text))))
 end;
