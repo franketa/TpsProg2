@@ -92,17 +92,18 @@
         </DelphiCompile>
         <DCCReference Include="menuPrincipal.pas">
             <Form>Form1</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ej1.pas">
             <Form>FormEj1</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ej2.pas">
             <Form>formej2</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ej3.pas">
+            <Form>formej3</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="ej4.pas">
             <Form>Form2</Form>
             <FormType>dfm</FormType>
         </DCCReference>
