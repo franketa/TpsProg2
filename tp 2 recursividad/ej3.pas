@@ -28,6 +28,7 @@ implementation
 
 function recFibo(x:integer):longint;
 begin
+
   if x <= 1 then result := x
   else result := recFibo(x - 1) + recFibo (x - 2);
 

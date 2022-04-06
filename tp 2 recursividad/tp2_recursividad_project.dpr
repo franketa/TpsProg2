@@ -6,7 +6,7 @@ uses
   ej1 in 'ej1.pas' {FormEj1},
   ej2 in 'ej2.pas' {formej2},
   ej3 in 'ej3.pas' {formej3},
-  ej4 in 'ej4.pas' {Form2};
+  ej4 in 'ej4.pas' {Formej4};
 
 {$R *.res}
 
@@ -17,6 +17,6 @@ begin
   Application.CreateForm(TFormEj1, FormEj1);
   Application.CreateForm(Tformej2, formej2);
   Application.CreateForm(Tformej3, formej3);
-  Application.CreateForm(TForm2, Form2);
+  Application.CreateForm(TForm2, Formej4);
   Application.Run;
 end.
