@@ -22,6 +22,9 @@ type
   arrayArrayPosiciones = array of arrayPosiciones;
 
   Tformej9 = class(TForm)
+    Memo1: TMemo;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -33,10 +36,10 @@ const
   max = 10;
    grilla : array[min..max, min..max] of String =
    (
+    ('C','C','C','C',' ',' ',' ',' ',' ',' '),
+    (' ',' ',' ','C',' ',' ',' ',' ',' ',' '),
+    ('',' ',' ','C',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
-    ('',' ','S','S',' ',' ',' ',' ',' ',' '),
-    ('','C',' ','S',' ',' ',' ',' ',' ',' '),
-    ('','S','S','S',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
@@ -72,54 +75,67 @@ var
     posSiguiente := posActual;
     inc(posSiguiente.col);
     // caso misma fila columna siguiente
-    if (grilla[posActual.fila, posActual.col] = 'C') and not(posActual.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.col < max) then begin
+    if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.col < max) then begin
       result := posSiguiente;
       exit;
     end;
     posSiguiente := posActual;
     dec(posSiguiente.col);
     // caso misma fila columna anterior
-    if (grilla[posActual.fila, posActual.col] = 'C') and not(posActual.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.col > min) then begin
+    if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and not(posSiguiente.esIgualA(posC1)) and (posActual.col > min) then begin
       result := posSiguiente;
       exit;
     end;
     // caso misma columna fila arriba
     posSiguiente := posActual;
     dec(posSiguiente.col);
-    if (grilla[posActual.fila, posActual.col] = 'C') and not(posActual.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.fila > min) then begin
+    if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and not(posSiguiente.esIgualA(posC1)) and (posActual.fila > min) then begin
       result := posSiguiente;
       exit;
     end;
     // caso misma columna fila abajo
     posSiguiente := posActual;
     inc(posSiguiente.fila);
-    if (grilla[posActual.fila, posActual.col] = 'C') and not(posActual.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.fila < max) then begin
+    if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and not(posSiguiente.esIgualA(posC1)) and (posActual.fila < max) then begin
       result := posSiguiente;
       exit;
     end;
+    // no encontró mas c's
+    result.fila := -1;
+
   end;
+
   procedure llenarVectorPosicionesSerpiente(posActual, posAnterior:posicion);
   var
     posSiguiente:posicion;
   begin
       // asigno el actual al vector
-      setLength(auxVectorResultado,indiceAuxVectorResultado + 1);
-      auxVectorResultado[indiceAuxVectorResultado] := posActual;
-      inc(indiceAuxVectorResultado);
-      posSiguiente := posicionSiguienteCarbono(posActual, posAnterior, posAnterior);
-      if posSiguiente then
+      setLength(auxVectorResultado,indiceAuxVectorResultado + 1); // aumento el largo del vResultado en 1
+      auxVectorResultado[indiceAuxVectorResultado] := posActual; // asigno la posicion en el ultimo del vResultado
 
+      inc(indiceAuxVectorResultado); // aumento el indice del vResultado
+      posSiguiente := posicionSiguienteCarbono(posActual, posAnterior, posAnterior); // busco la siguiente C
+      if posSiguiente.fila <> -1 then begin
+        llenarVectorPosicionesSerpiente(posSiguiente, posActual);
+      end;
+      // no encontró mas c's
 
 
   end;
 
 begin
   indiceAuxVectorResultado := 0;
-  pos := posicionCabeza();
+  pos.fila := 1;
+  pos.col := 1;
   pos2.col := -1;
   pos2.fila := -1;
   llenarVectorPosicionesSerpiente(pos, pos2);
   result := auxVectorResultado;
+end;
+
+procedure Tformej9.Button1Click(Sender: TObject);
+begin
+  getVectorPosicionesSerpiente
 end;
 
 end.
