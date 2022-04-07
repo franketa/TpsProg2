@@ -6,11 +6,10 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,typinfo, Vcl.StdCtrls;
 
-
-
-
 type
+
   enumIndice = (A, B, C, D, E, F, G, H, I, J);
+
   posicion = object
     fila:integer;
     col :integer;
@@ -19,7 +18,9 @@ type
   end;
 
   arrayPosiciones = array of posicion;
-type
+
+  arrayArrayPosiciones = array of arrayPosiciones;
+
   Tformej9 = class(TForm)
   private
     { Private declarations }
@@ -58,55 +59,67 @@ begin
   if (fila = pos2.fila) and (col = pos2.col) then result := true;
 end;
 
-function caminoCarbono:arrayPosiciones;
+function getVectorPosicionesSerpiente:arrayPosiciones;
 var
   pos, pos2:posicion;
-  auxPosiciones:arrayPosiciones;
-  indiceArrayPosiciones:integer;
+  auxVectorResultado:arrayPosiciones;
+  indiceAuxVectorResultado:integer;
 
-  procedure posicionesCarbono(posActual, posAnterior:posicion; var indiceArray:integer; var arrayResultado:arrayPosiciones);
+  function posicionSiguienteCarbono(posActual,posAnterior,posC1:posicion):posicion;
+  var
+    posC2aux,posSiguiente:posicion;
+  begin
+    posSiguiente := posActual;
+    inc(posSiguiente.col);
+    // caso misma fila columna siguiente
+    if (grilla[posActual.fila, posActual.col] = 'C') and not(posActual.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.col < max) then begin
+      result := posSiguiente;
+      exit;
+    end;
+    posSiguiente := posActual;
+    dec(posSiguiente.col);
+    // caso misma fila columna anterior
+    if (grilla[posActual.fila, posActual.col] = 'C') and not(posActual.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.col > min) then begin
+      result := posSiguiente;
+      exit;
+    end;
+    // caso misma columna fila arriba
+    posSiguiente := posActual;
+    dec(posSiguiente.col);
+    if (grilla[posActual.fila, posActual.col] = 'C') and not(posActual.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.fila > min) then begin
+      result := posSiguiente;
+      exit;
+    end;
+    // caso misma columna fila abajo
+    posSiguiente := posActual;
+    inc(posSiguiente.fila);
+    if (grilla[posActual.fila, posActual.col] = 'C') and not(posActual.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.fila < max) then begin
+      result := posSiguiente;
+      exit;
+    end;
+  end;
+  procedure llenarVectorPosicionesSerpiente(posActual, posAnterior:posicion);
   var
     posSiguiente:posicion;
-    fin:boolean;
   begin
       // asigno el actual al vector
-      setLength(arrayResultado,indiceArray + 1);
-      arrayResultado[indiceArray] := posActual;
-      inc(indiceArray);
+      setLength(auxVectorResultado,indiceAuxVectorResultado + 1);
+      auxVectorResultado[indiceAuxVectorResultado] := posActual;
+      inc(indiceAuxVectorResultado);
+      posSiguiente := posicionSiguienteCarbono(posActual, posAnterior, posAnterior);
+      if posSiguiente then
 
-      // caso misma fila columna siguiente
-      posSiguiente := posActual;
-      inc(posSiguiente.col);
-      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.col < max) then begin
-        posicionesCarbono(posSiguiente, posActual, indiceArray, arrayResultado);
-      end;
 
-      // caso misma fila columna anterior
-      posSiguiente := posActual;
-      dec(posSiguiente.col);
-      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.col > min) then
-        posicionesCarbono(posSiguiente, posActual, indiceArray, arrayResultado);
 
-      // caso misma columna fila arriba
-      posSiguiente := posActual;
-      dec(posSiguiente.fila);
-      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila > min) then
-        posicionesCarbono(posSiguiente,posActual, indiceArray, arrayResultado);
-
-      // caso misma columna fila abajo
-      posSiguiente := posActual;
-      inc(posSiguiente.fila);
-      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila < max) then
-        posicionesCarbono(posSiguiente,posActual, indiceArray, arrayResultado);
   end;
 
 begin
-  indiceArrayPosiciones := 0;
+  indiceAuxVectorResultado := 0;
+  pos := posicionCabeza();
   pos2.col := -1;
   pos2.fila := -1;
-  posicionesCarbono(pos, pos2, indiceArrayPosiciones, auxPosiciones);
-  result := auxPosiciones;
+  llenarVectorPosicionesSerpiente(pos, pos2);
+  result := auxVectorResultado;
 end;
-
 
 end.
