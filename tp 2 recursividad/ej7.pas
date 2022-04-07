@@ -36,10 +36,10 @@ const
    grilla : array[min..max, min..max] of String =
    (
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
-    ('','S','S','S','S','S','S','S','S','S'),
-    ('',' ',' ',' ',' ',' ',' ',' ',' ','S'),
-    ('',' ',' ',' ',' ',' ',' ',' ',' ','S'),
-    ('',' ',' ',' ',' ',' ',' ',' ',' ','C'),
+    ('',' ','S','S',' ',' ',' ',' ',' ',' '),
+    ('','C',' ','S',' ',' ',' ',' ',' ',' '),
+    ('','S','S','S',' ',' ',' ',' ',' ',' '),
+    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
@@ -109,7 +109,7 @@ var
 begin
 
   if length(arrayPos) > 1 then begin
-    strAux := 'La serpiente, cuya cabeza comenzó en ( ' + arrayPos[length(arrayPos)-1].fila.ToString + ',' +  GetEnumName(typeInfo(enumIndice), arrayPos[length(arrayPos)-1].col-1) + ') y recorrió';
+    strAux := 'La serpiente, cuya cabeza comenzó en ( ' + arrayPos[length(arrayPos)-1].fila.ToString + ',' +  GetEnumName(typeInfo(enumIndice), arrayPos[length(arrayPos)-1].col-1) + ') y recorrió ';
     for I := length(arrayPos)-2 downto 0 do
       strAux := strAux + '(' + arrayPos[i].fila.ToString + ',' +  GetEnumName(typeInfo(enumIndice), arrayPos[i].col-1) + ') ';
     strAux := strAux + '. Su longitud es de ' + length(arrayPos).ToString;
@@ -121,46 +121,50 @@ begin
   result := strAux;
 end;
 
-function caminoSerpiente : arrayPosiciones;
+function caminoSerpiente:arrayPosiciones;
 var
   pos, pos2:posicion;
   auxPosiciones:arrayPosiciones;
   indiceArrayPosiciones:integer;
 
-  procedure posicionesSerpiente(posActual, posAnterior:posicion; var indiceArray:integer; var arrayResultado:arrayPosiciones);
+  procedure posicionesSerpiente(posActual, posAnterior:posicion);
   var
     posSiguiente:posicion;
     fin:boolean;
+    arrayResultado:arrayPosiciones;
   begin
       // asigno el actual al vector
-      setLength(arrayResultado,indiceArray+1);
-      arrayResultado[indiceArray] := posActual;
-      inc(indiceArray);
+      setLength(auxPosiciones,indiceArrayPosiciones + 1);
+      auxPosiciones[indiceArrayPosiciones] := posActual;
+      inc(indiceArrayPosiciones);
 
       // caso misma fila columna siguiente
       posSiguiente := posActual;
       inc(posSiguiente.col);
       if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.col < max) then begin
-        posicionesSerpiente(posSiguiente, posActual, indiceArray, arrayResultado);
+        posicionesSerpiente(posSiguiente, posActual);
       end;
 
       // caso misma fila columna anterior
       posSiguiente := posActual;
       dec(posSiguiente.col);
-      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.col > min) then
-        posicionesSerpiente(posSiguiente, posActual, indiceArray, arrayResultado);
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.col > min) then begin
+        posicionesSerpiente(posSiguiente, posActual);
+      end;
 
       // caso misma columna fila arriba
       posSiguiente := posActual;
       dec(posSiguiente.fila);
-      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila > min) then
-        posicionesSerpiente(posSiguiente,posActual, indiceArray, arrayResultado);
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila > min) then begin
+        posicionesSerpiente(posSiguiente, posActual);
+      end;
 
       // caso misma columna fila abajo
       posSiguiente := posActual;
       inc(posSiguiente.fila);
-      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila < max) then
-        posicionesSerpiente(posSiguiente,posActual, indiceArray, arrayResultado);
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila < max) then begin
+        posicionesSerpiente(posSiguiente, posActual);
+      end;
   end;
 
 begin
@@ -168,18 +172,14 @@ begin
   pos := posicionCabeza();
   pos2.col := -1;
   pos2.fila := -1;
-  posicionesSerpiente(pos, pos2, indiceArrayPosiciones, auxPosiciones);
+  posicionesSerpiente(pos, pos2);
   result := auxPosiciones;
 end;
-
-
 
 procedure Tformej7.Button1Click(Sender: TObject);
 var
   auxInteger, indiceArrayPosiciones:integer;
-
 begin
-
   memo1.Lines.Add(mostrarPosSerpiente(caminoSerpiente));
 end;
 
