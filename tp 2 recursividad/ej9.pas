@@ -112,7 +112,6 @@ var
       // asigno el actual al vector
       setLength(auxVectorResultado,indiceAuxVectorResultado + 1); // aumento el largo del vResultado en 1
       auxVectorResultado[indiceAuxVectorResultado] := posActual; // asigno la posicion en el ultimo del vResultado
-
       inc(indiceAuxVectorResultado); // aumento el indice del vResultado
       posSiguiente := posicionSiguienteCarbono(posActual, posAnterior, posAnterior); // busco la siguiente C
       if posSiguiente.fila <> -1 then begin
