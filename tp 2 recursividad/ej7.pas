@@ -33,47 +33,47 @@ type
 const
   min = 1;
   max = 10;
-//  grilla : array[min..max, min..max] of String =
+   grilla : array[min..max, min..max] of String =
+   (
+    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
+    ('','S','S','S','S','S','S','S','S','S'),
+    ('',' ',' ',' ',' ',' ',' ',' ',' ','S'),
+    ('',' ',' ',' ',' ',' ',' ',' ',' ','S'),
+    ('',' ',' ',' ',' ',' ',' ',' ',' ','C'),
+    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
+    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
+    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
+    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
+    ('',' ',' ',' ',' ',' ',' ',' ',' ',' ')
+   );
+
+//   grilla : array[min..max, min..max] of String =
 //   (
-//    ('', '', '', '', '', '', '', '','',''),
-//    ('', 'S', '', '', '', '', '', '','',''),
-//    ('', 'S', 'S', '', '', '', '', '','',''),
-//    ('', '', 'S', '', '', '', '', '','',''),
-//    ('', '', 'S', 'S', 'S', 'S', 'S', '','',''),
-//    ('', '', '', '', '', '', '', 'S','',''),
-//    ('', '', '', '', '', '', '', 'S','',''),
-//    ('', '', '', '', '', 'C', 'S', 'S','',''),
-//    ('', '', '', '', '', '', '', '','',''),
-//    ('', '', '', '', '', '', '', '','','')
+//    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
+//    ('','S',' ',' ',' ',' ',' ',' ',' ',' '),
+//    ('','S','S',' ',' ',' ',' ',' ',' ',' '),
+//    ('',' ','S',' ',' ',' ',' ',' ',' ',' '),
+//    ('',' ','S','S','S','S','S','S',' ',' '),
+//    ('',' ',' ',' ',' ',' ',' ','S',' ',' '),
+//    ('',' ',' ',' ',' ',' ',' ','S',' ',' '),
+//    ('',' ',' ',' ',' ','C','S','S',' ',' '),
+//    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
+//    ('',' ',' ',' ',' ',' ',' ',' ',' ',' ')
 //   );
 
 //   grilla : array[min..max, min..max] of String =
 //   (
 //    ('', '', '', '', '', '', '', '','',''),
-//    ('', 'S', '', '', '', '', '', '','',''),
-//    ('', 'S', 'S', '', '', '', '', '','',''),
-//    ('', '', 'S', '', '', '', '', '','',''),
-//    ('', '', 'S', 'S', 'S', 'S', 'S', '','',''),
-//    ('', '', '', '', '', '', '', 'S','',''),
-//    ('', '', '', '', '', '', '', 'S','',''),
-//    ('', '', '', '', '', 'C', 'S', 'S','',''),
 //    ('', '', '', '', '', '', '', '','',''),
-//    ('', '', '', '', '', '', '', '','','')
+//    ('', '', '', '', '', '', '', '','',''),
+//    ('', '', '', '', '', '', '', '','',''),
+//    ('', '', '', '', '', '', '', '','',''),
+//    ('', '', '', '', '', '', '', '','',''),
+//    ('', '', '', '', '', '', '', '','',''),
+//    ('', '', '', '', '', '', '', '','',''),
+//    ('', '', '', '', '', '', '', '','',''),
+//    ('', '', '', '', '', '', '', '','','C')
 //   );
-
-   grilla : array[min..max, min..max] of String =
-   (
-    ('C', '', '', '', '', '', '', '','',''),
-    ('', '', '', '', '', '', '', '','',''),
-    ('', '', '', '', '', '', '', '','',''),
-    ('', '', '', '', '', '', '', '','',''),
-    ('', '', '', '', '', '', '', '','',''),
-    ('', '', '', '', '', '', '', '','',''),
-    ('', '', '', '', '', '', '', '','',''),
-    ('', '', '', '', '', '', '', '','',''),
-    ('', '', '', '', '', '', '', '','',''),
-    ('', '', '', '', '', '', '', '','','')
-   );
 
 var
   formej7: Tformej7;
@@ -110,7 +110,7 @@ begin
 
   if length(arrayPos) > 1 then begin
     strAux := 'La serpiente, cuya cabeza comenzó en ( ' + arrayPos[length(arrayPos)-1].fila.ToString + ',' +  GetEnumName(typeInfo(enumIndice), arrayPos[length(arrayPos)-1].col-1) + ') y recorrió';
-    for I := length(arrayPos)-1 downto 0 do
+    for I := length(arrayPos)-2 downto 0 do
       strAux := strAux + '(' + arrayPos[i].fila.ToString + ',' +  GetEnumName(typeInfo(enumIndice), arrayPos[i].col-1) + ') ';
     strAux := strAux + '. Su longitud es de ' + length(arrayPos).ToString;
   end else if length(arrayPos) = 1 then
@@ -121,47 +121,66 @@ begin
   result := strAux;
 end;
 
-procedure posSerpiente(posAnterior:posicion; var indiceArray:integer; var arrayResultado:arrayPosiciones);
-begin
-  if posAnterior.fila <> -1 then begin
-    // Si es una posicion valida la agrego al vector resultado
-    setLength(arrayResultado, indiceArray + 1);
-    arrayResultado[indiceArray] := posAnterior;
-    inc(indiceArray);
-// pregunto por cada fila columna siguiente si hay 'S'
-    // caso misma fila columna siguiente
-    inc(posAnterior.col);
-    if (grilla[posAnterior.fila, posAnterior.col] = 'S') and not(posAnterior.esIgualA(arrayResultado[indiceArray - 2])) and (posAnterior.col < max)  then
-      posSerpiente(posAnterior, indiceArray, arrayResultado);
-    // caso misma fila columna anterior
-    posAnterior := arrayResultado[indiceArray - 1];
-    dec(posAnterior.col);
-    if (grilla[posAnterior.fila, posAnterior.col] = 'S') and not(posAnterior.esIgualA(arrayResultado[indiceArray - 2 ])) and (posAnterior.col > min)  then
-      posSerpiente(posAnterior, indiceArray, arrayResultado);
-    // caso misma columna fila arriba
-    posAnterior := arrayResultado[indiceArray - 1];
-    dec(posAnterior.fila);
-    if (grilla[posAnterior.fila, posAnterior.col] = 'S') and not(posAnterior.esIgualA(arrayResultado[indiceArray - 2 ])) and (posAnterior.fila > min)  then
-      posSerpiente(posAnterior, indiceArray, arrayResultado);
-    // caso misma columna fila abajo
-    posAnterior := arrayResultado[indiceArray - 1];
-    inc(posAnterior.fila);
-    if (grilla[posAnterior.fila, posAnterior.col] = 'S') and not(posAnterior.esIgualA(arrayResultado[indiceArray - 2 ])) and (posAnterior.fila < max) then
-      posSerpiente(posAnterior, indiceArray, arrayResultado);
+function caminoSerpiente : arrayPosiciones;
+var
+  pos, pos2:posicion;
+  auxPosiciones:arrayPosiciones;
+  indiceArrayPosiciones:integer;
+
+  procedure posicionesSerpiente(posActual, posAnterior:posicion; var indiceArray:integer; var arrayResultado:arrayPosiciones);
+  var
+    posSiguiente:posicion;
+    fin:boolean;
+  begin
+      // asigno el actual al vector
+      setLength(arrayResultado,indiceArray+1);
+      arrayResultado[indiceArray] := posActual;
+      inc(indiceArray);
+
+      // caso misma fila columna siguiente
+      posSiguiente := posActual;
+      inc(posSiguiente.col);
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.col < max) then begin
+        posicionesSerpiente(posSiguiente, posActual, indiceArray, arrayResultado);
+      end;
+
+      // caso misma fila columna anterior
+      posSiguiente := posActual;
+      dec(posSiguiente.col);
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.col > min) then
+        posicionesSerpiente(posSiguiente, posActual, indiceArray, arrayResultado);
+
+      // caso misma columna fila arriba
+      posSiguiente := posActual;
+      dec(posSiguiente.fila);
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila > min) then
+        posicionesSerpiente(posSiguiente,posActual, indiceArray, arrayResultado);
+
+      // caso misma columna fila abajo
+      posSiguiente := posActual;
+      inc(posSiguiente.fila);
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'S') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila < max) then
+        posicionesSerpiente(posSiguiente,posActual, indiceArray, arrayResultado);
   end;
+
+begin
+  indiceArrayPosiciones := 0;
+  pos := posicionCabeza();
+  pos2.col := -1;
+  pos2.fila := -1;
+  posicionesSerpiente(pos, pos2, indiceArrayPosiciones, auxPosiciones);
+  result := auxPosiciones;
 end;
+
+
 
 procedure Tformej7.Button1Click(Sender: TObject);
 var
   auxInteger, indiceArrayPosiciones:integer;
-  pos:posicion;
-  auxPosiciones:arrayPosiciones;
+
 begin
-  indiceArrayPosiciones := 0;
-  pos := posicionCabeza();
-  memo1.Lines.Add('Fila: '+ pos.fila.ToString + 'Columna: '+ GetEnumName(typeInfo(enumIndice), Ord(pos.col)));
-  posSerpiente(pos, indiceArrayPosiciones, auxPosiciones);
-  memo1.Lines.Add(mostrarPosSerpiente(auxPosiciones));
+
+  memo1.Lines.Add(mostrarPosSerpiente(caminoSerpiente));
 end;
 
 
