@@ -65,6 +65,7 @@ function setVectorVectores():arrayarrayPosiciones;
 var
   indiceArrayArray:integer;
   arrayDeArraysResultado:arrayarrayPosiciones;
+
   function getVectorPosicionesCarbonos(posActual, posAnterior:posicion; auxVectorResultado:arrayPosiciones; indiceAuxVectorResultado:integer):arrayPosiciones;
   var
     contador:integer;
