@@ -29,6 +29,5 @@ object formej9: Tformej9
     Height = 49
     Caption = 'Button1'
     TabOrder = 1
-    OnClick = Button1Click
   end
 end

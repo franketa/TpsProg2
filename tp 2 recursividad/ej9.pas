@@ -24,7 +24,6 @@ type
   Tformej9 = class(TForm)
     Memo1: TMemo;
     Button1: TButton;
-    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -36,10 +35,10 @@ const
   max = 10;
    grilla : array[min..max, min..max] of String =
    (
-    ('C','C','C','C',' ',' ',' ',' ',' ',' '),
-    (' ',' ',' ','C',' ',' ',' ',' ',' ',' '),
-    ('',' ',' ','C',' ',' ',' ',' ',' ',' '),
-    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
+    ('C','C','C','C',' ','C',' ',' ',' ',' '),
+    ('',' ',' ','C',' ','C',' ',' ',' ',' '),
+    ('',' ',' ','C','C','C',' ',' ',' ',' '),
+    ('',' ',' ',' ',' ','C',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
@@ -62,79 +61,97 @@ begin
   if (fila = pos2.fila) and (col = pos2.col) then result := true;
 end;
 
-function getVectorPosicionesSerpiente:arrayPosiciones;
+function setVectorVectores():arrayarrayPosiciones;
 var
-  pos, pos2:posicion;
-  auxVectorResultado:arrayPosiciones;
-  indiceAuxVectorResultado:integer;
-
-  function posicionSiguienteCarbono(posActual,posAnterior,posC1:posicion):posicion;
+  indiceArrayArray:integer;
+  arrayDeArraysResultado:arrayarrayPosiciones;
+  function getVectorPosicionesCarbonos(posActual, posAnterior:posicion; auxVectorResultado:arrayPosiciones; indiceAuxVectorResultado:integer):arrayPosiciones;
   var
-    posC2aux,posSiguiente:posicion;
-  begin
-    posSiguiente := posActual;
-    inc(posSiguiente.col);
-    // caso misma fila columna siguiente
-    if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and not(posActual.esIgualA(posC1)) and (posActual.col < max) then begin
-      result := posSiguiente;
-      exit;
-    end;
-    posSiguiente := posActual;
-    dec(posSiguiente.col);
-    // caso misma fila columna anterior
-    if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and not(posSiguiente.esIgualA(posC1)) and (posActual.col > min) then begin
-      result := posSiguiente;
-      exit;
-    end;
-    // caso misma columna fila arriba
-    posSiguiente := posActual;
-    dec(posSiguiente.col);
-    if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and not(posSiguiente.esIgualA(posC1)) and (posActual.fila > min) then begin
-      result := posSiguiente;
-      exit;
-    end;
-    // caso misma columna fila abajo
-    posSiguiente := posActual;
-    inc(posSiguiente.fila);
-    if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and not(posSiguiente.esIgualA(posC1)) and (posActual.fila < max) then begin
-      result := posSiguiente;
-      exit;
-    end;
-    // no encontró mas c's
-    result.fila := -1;
+    contador:integer;
 
-  end;
-
-  procedure llenarVectorPosicionesSerpiente(posActual, posAnterior:posicion);
+  procedure llenarArrayPosicionesCarbono(posActual,posAnterior:posicion);
   var
-    posSiguiente:posicion;
+    pos1, pos2, posSiguiente:posicion;
   begin
-      // asigno el actual al vector
+    // inicializo
+    pos1.fila := -1;
+    pos2.fila := -1;
+    contador := 0;
+    // asigno el actual al vector
+    if posActual.fila <> -1 then begin
       setLength(auxVectorResultado,indiceAuxVectorResultado + 1); // aumento el largo del vResultado en 1
       auxVectorResultado[indiceAuxVectorResultado] := posActual; // asigno la posicion en el ultimo del vResultado
       inc(indiceAuxVectorResultado); // aumento el indice del vResultado
-      posSiguiente := posicionSiguienteCarbono(posActual, posAnterior, posAnterior); // busco la siguiente C
-      if posSiguiente.fila <> -1 then begin
-        llenarVectorPosicionesSerpiente(posSiguiente, posActual);
-      end;
-      // no encontró mas c's
 
+      posSiguiente := posActual;
+      inc(posSiguiente.col);
+      // caso misma fila columna siguiente
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.col < max) then begin
+        if contador = 1 then begin
+          pos2 := posSiguiente;
+          getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);
+        end;
+        if contador = 0 then begin
+          pos1 := posSiguiente;
+          inc(contador);
+        end;
+      end;
+      posSiguiente := posActual;
+      dec(posSiguiente.col);
+      // caso misma fila columna anterior
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and (posSiguiente.col > min) then begin
+        if contador = 1 then begin
+          pos2 := posSiguiente;
+          getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);
+        end;
+        if contador = 0 then begin
+          pos1 := posSiguiente;
+          inc(contador);
+        end;
+      end;
+      // caso misma columna fila arriba
+      posSiguiente := posActual;
+      dec(posSiguiente.fila);
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and (posSiguiente.fila > min) then begin
+        if contador = 1 then begin
+          pos2 := posSiguiente;
+          getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);
+        end;
+        if contador = 0 then begin
+          pos1 := posSiguiente;
+          inc(contador);
+        end;
+      end;
+      // caso misma columna fila abajo
+      posSiguiente := posActual;
+      inc(posSiguiente.fila);
+      if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila < max) then begin
+        if contador = 1 then begin
+          pos2 := posSiguiente;
+          getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);
+        end;
+        if contador = 0 then begin
+          pos1 := posSiguiente;
+          inc(contador);
+        end;
+      end;
+      // ya tengo la o las posiciones de las c siguientes
+      llenarArrayPosicionesCarbono(pos1,posActual);
+    end;
+    // asigno al vector vectores posiciones
 
   end;
-
+  begin
+    llenarArrayPosicionesCarbono(posActual, posAnterior);
+    result := auxVectorResultado;
+  end;
+  // funcion auxiliar fin
+// funcion principal
 begin
-  indiceAuxVectorResultado := 0;
-  pos.fila := 1;
-  pos.col := 1;
-  pos2.col := -1;
-  pos2.fila := -1;
-  llenarVectorPosicionesSerpiente(pos, pos2);
-  result := auxVectorResultado;
+  indiceArrayArray := 0;
+
+
 end;
 
-procedure Tformej9.Button1Click(Sender: TObject);
-begin
-  getVectorPosicionesSerpiente
-end;
 
 end.

@@ -88,19 +88,7 @@ begin
   if (fila = pos2.fila) and (col = pos2.col) then result := true;
 end;
 
-function posicionCabeza():posicion;
-var
-  x, y:integer;
-begin
-  result.fila := -1;
-  for x := min to max do
-    for y := min to max do begin
-      if grilla[x,y] = 'C' then begin
-        result.fila := x;
-        result.col := y;
-      end;
-    end;
-end;
+
 
 function mostrarPosSerpiente(arrayPos:arrayPosiciones):string;
 var
@@ -126,12 +114,23 @@ var
   pos, pos2:posicion;
   auxPosiciones:arrayPosiciones;
   indiceArrayPosiciones:integer;
+  function posicionCabeza():posicion;
+var
+  x, y:integer;
+begin
+  result.fila := -1;
+  for x := min to max do
+    for y := min to max do begin
+      if grilla[x,y] = 'C' then begin
+        result.fila := x;
+        result.col := y;
+      end;
+    end;
+end;
 
   procedure posicionesSerpiente(posActual, posAnterior:posicion);
   var
     posSiguiente:posicion;
-    fin:boolean;
-    arrayResultado:arrayPosiciones;
   begin
       // asigno el actual al vector
       setLength(auxPosiciones,indiceArrayPosiciones + 1);
