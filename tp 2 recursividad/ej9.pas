@@ -24,6 +24,7 @@ type
   Tformej9 = class(TForm)
     Memo1: TMemo;
     Button1: TButton;
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -35,11 +36,11 @@ const
   max = 10;
    grilla : array[min..max, min..max] of String =
    (
-    ('C','C','C','C',' ','C',' ',' ',' ',' '),
+    ('C','C','C','C',' ',' ',' ',' ',' ',' '),
     ('',' ',' ','C',' ','C',' ',' ',' ',' '),
     ('',' ',' ','C','C','C',' ',' ',' ',' '),
+    ('',' ',' ','C',' ','C',' ',' ',' ',' '),
     ('',' ',' ',' ',' ','C',' ',' ',' ',' '),
-    ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
     ('',' ',' ',' ',' ',' ',' ',' ',' ',' '),
@@ -65,12 +66,12 @@ function setVectorVectores():arrayarrayPosiciones;
 var
   indiceArrayArray:integer;
   arrayDeArraysResultado:arrayarrayPosiciones;
+  posInicial,posAnteriorInicial:posicion;
 
   function getVectorPosicionesCarbonos(posActual, posAnterior:posicion; auxVectorResultado:arrayPosiciones; indiceAuxVectorResultado:integer):arrayPosiciones;
-  var
-    contador:integer;
-
-  procedure llenarArrayPosicionesCarbono(posActual,posAnterior:posicion);
+    var
+      contador:integer;
+    procedure llenarArrayPosicionesCarbono(posActual,posAnterior:posicion);
   var
     pos1, pos2, posSiguiente:posicion;
   begin
@@ -90,7 +91,9 @@ var
       if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.col < max) then begin
         if contador = 1 then begin
           pos2 := posSiguiente;
-          getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);
+          setLength(arrayDeArraysResultado,indiceArrayArray + 1); // aumento el largo del vResultado en 1
+          arrayDeArraysResultado[indiceArrayArray] := getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);; // asigno la posicion en el ultimo del vResultado
+          inc(indiceArrayArray);
         end;
         if contador = 0 then begin
           pos1 := posSiguiente;
@@ -103,7 +106,9 @@ var
       if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and (posSiguiente.col > min) then begin
         if contador = 1 then begin
           pos2 := posSiguiente;
-          getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);
+          setLength(arrayDeArraysResultado,indiceArrayArray + 1); // aumento el largo del vResultado en 1
+          arrayDeArraysResultado[indiceArrayArray] := getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);; // asigno la posicion en el ultimo del vResultado
+          inc(indiceArrayArray);
         end;
         if contador = 0 then begin
           pos1 := posSiguiente;
@@ -116,7 +121,9 @@ var
       if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior))and (posSiguiente.fila > min) then begin
         if contador = 1 then begin
           pos2 := posSiguiente;
-          getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);
+          setLength(arrayDeArraysResultado,indiceArrayArray + 1); // aumento el largo del vResultado en 1
+          arrayDeArraysResultado[indiceArrayArray] := getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);; // asigno la posicion en el ultimo del vResultado
+          inc(indiceArrayArray);
         end;
         if contador = 0 then begin
           pos1 := posSiguiente;
@@ -129,7 +136,9 @@ var
       if (grilla[posSiguiente.fila, posSiguiente.col] = 'C') and not(posSiguiente.esIgualA(posAnterior)) and (posSiguiente.fila < max) then begin
         if contador = 1 then begin
           pos2 := posSiguiente;
-          getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);
+          setLength(arrayDeArraysResultado,indiceArrayArray + 1); // aumento el largo del vResultado en 1
+          arrayDeArraysResultado[indiceArrayArray] := getVectorPosicionesCarbonos(pos2,posActual,auxVectorResultado, indiceAuxVectorResultado);; // asigno la posicion en el ultimo del vResultado
+          inc(indiceArrayArray);
         end;
         if contador = 0 then begin
           pos1 := posSiguiente;
@@ -140,7 +149,9 @@ var
       llenarArrayPosicionesCarbono(pos1,posActual);
     end;
     // asigno al vector vectores posiciones
-
+    setLength(auxVectorResultado,indiceAuxVectorResultado + 1); // aumento el largo del vResultado en 1
+    auxVectorResultado[indiceAuxVectorResultado] := posActual; // asigno la posicion en el ultimo del vResultado
+    inc(indiceAuxVectorResultado);
   end;
   begin
     llenarArrayPosicionesCarbono(posActual, posAnterior);
@@ -149,10 +160,19 @@ var
   // funcion auxiliar fin
 // funcion principal
 begin
-  indiceArrayArray := 0;
-
-
+  indiceArrayArray := 1;
+  posInicial.fila := 1;
+  posInicial.col := 1;
+  posAnteriorInicial.fila := -1;
+  posAnteriorInicial.col := -1;
+  setLength(arrayDeArraysResultado, 1);
+  arrayDeArraysResultado[0] := getVectorPosicionesCarbonos(posInicial, posAnteriorInicial, arrayDeArraysResultado[0], indiceArrayArray);
 end;
 
+
+procedure Tformej9.Button1Click(Sender: TObject);
+begin
+   setVectorVectores();
+end;
 
 end.
