@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ej1,ej2,ej3,ej4,ej5,ej7,ej9, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ej10, ej1,ej2,ej3,ej4,ej5,ej7,ej9, Vcl.StdCtrls;
 
 type
   TForm1 = class(TForm)
@@ -15,6 +15,7 @@ type
     Button5: TButton;
     Button6: TButton;
     Button7: TButton;
+    Button8: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -22,6 +23,7 @@ type
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -68,6 +70,11 @@ end;
 procedure TForm1.Button7Click(Sender: TObject);
 begin
   formej9.Show;
+end;
+
+procedure TForm1.Button8Click(Sender: TObject);
+begin
+  formej10.show;
 end;
 
 end.

@@ -172,9 +172,6 @@ begin
     end;
     memo.Lines.Add(strAux);
   end;
-
-
-
 end;
 
 

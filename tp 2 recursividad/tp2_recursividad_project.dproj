@@ -123,6 +123,10 @@
             <Form>formej9</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="ej10.pas">
+            <Form>formej10</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

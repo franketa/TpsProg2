@@ -10,7 +10,8 @@ uses
   ej5 in 'ej5.pas' {Formej5},
   ej6 in 'ej6.pas' {formej6},
   ej7 in 'ej7.pas' {formej7},
-  ej9 in 'ej9.pas' {formej9};
+  ej9 in 'ej9.pas' {formej9},
+  ej10 in 'ej10.pas' {formej10};
 
 {$R *.res}
 
@@ -26,5 +27,6 @@ begin
   Application.CreateForm(Tformej6, formej6);
   Application.CreateForm(Tformej7, formej7);
   Application.CreateForm(Tformej9, formej9);
+  Application.CreateForm(Tformej10, formej10);
   Application.Run;
 end.
