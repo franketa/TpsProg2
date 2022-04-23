@@ -11,6 +11,9 @@ const
   max = 10;
 
 type
+
+  repetidos = array of integer;
+
   TForm1 = class(TForm)
     Memo1: TMemo;
     Button1: TButton;
@@ -80,38 +83,58 @@ begin
   memo1.Lines.Add('Menor :' + menor.ToString + ' pos: '+ pMenor.ToString);
 end;
 
+function estaRepetido(dato:integer;vector:repetidos):boolean;
+var
+  i:integer;
+  flag:boolean;
+begin
+  flag := false;
+  i:=0;
+  while (i < length(vector) - 1) and not flag do begin
+    if vector[i] = dato then flag := true;
+    inc(i);
+  end;
+  result := flag;
+end;
+
 procedure TForm1.Button3Click(Sender: TObject);
 var
   l1:lista;
   X:tipoelemento;
   p:posicionLista;
-  repetidos : array of integer;
-  num,rango,i, j,indiceRepetidos:integer;
+  vRepetidos:repetidos;
+  num,rango,indiceRepetidos:integer;
+  i: Integer;
 begin
-  rango := 12;
-  l1.Crear(numero, max);
-  setlength(repetidos, 1);
+  rango := 4;
+  l1.Crear(numero, 3);
+
   num := random(rango);
   x.Clave := num;
   l1.Agregar(x);
-  repetidos[0]:= num;
+
+  setlength(vRepetidos, 1);
+  vRepetidos[0]:= num;
   indiceRepetidos := 1;
-  i:=1;
+
   p := 2;
-  while p <> nulo do begin
-     num := random(rango);
-     j := 0;
-     while num = repetidos[j] do begin
-        num := random(rango);
-        inc(j);
-     end;
+
+  while p < max do begin
+    num := random(rango);
+    while estaRepetido(num, vRepetidos) do begin
+      num := random(rango);
+    end;
+
     x.Clave := num;
     l1.Agregar(x);
-    setlength(repetidos, indiceRepetidos + 1);
-    repetidos[i]:= num;
-    inc(i);
+    setlength(vRepetidos, indiceRepetidos + 1);
+    vRepetidos[indiceRepetidos]:= num;
+    inc(indiceRepetidos);
+
     p := l1.Siguiente(p);
+
   end;
+
   memo1.Lines.Add(l1.RetornarClaves);
 
 end;
