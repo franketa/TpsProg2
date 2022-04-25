@@ -10,7 +10,7 @@ uses
 
 const
   largoListaAutos = 10;
-  largoListaMultas = 20;
+  largoListaMultas = 5;
 
 
 type
@@ -18,12 +18,33 @@ type
   enumEstado = (Pendiente, Abonada, Anulada);
 
   TForm2 = class(TForm)
-    Button1: TButton;
     Memo1: TMemo;
-    nashei: TButton;
-    procedure Button1Click(Sender: TObject);
-    procedure nasheiClick(Sender: TObject);
+    btnTotalPatente: TButton;
+    btnMasAntigua: TButton;
+    Label1: TLabel;
+    Label3: TLabel;
+    btnMasReciente: TButton;
+    Label4: TLabel;
+    inPatentePunto1: TEdit;
+    Label5: TLabel;
+    Label6: TLabel;
+    btnAutoMasMultas: TButton;
+    Memo2: TMemo;
+    btnVerTodasMultas: TButton;
+    inVerTodasMultas: TEdit;
+    Label2: TLabel;
+    btnAutoMasDeuda: TButton;
+    Label7: TLabel;
+    Button1: TButton;
+
+    procedure btnTotalPatenteClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure btnMasAntiguaClick(Sender: TObject);
+    procedure btnMasRecienteClick(Sender: TObject);
+    procedure btnAutoMasMultasClick(Sender: TObject);
+    procedure btnVerTodasMultasClick(Sender: TObject);
+    procedure btnAutoMasDeudaClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -47,7 +68,7 @@ implementation
 
 {$R *.dfm}
 
-function totalAdeudado(patente: string; listaAutos: Lista): longInt;
+function totalAdeudadoAuto(patente: string; listaAutos: Lista): longInt;
 var
   x, multa: tipoElemento;
   listaMulta: Lista;
@@ -74,11 +95,12 @@ begin
         posListaMulta := punListaMulta.Siguiente(posListaMulta);
       end;
     end;
+    p := listaAutos.siguiente(p);
   end;
   result := total;
 end;
 
-function multaMasAntigua(patente:string; listaAutos:lista):tipoElemento;
+function adeudadoMultaMasAntigua(patente:string; listaAutos:lista):tipoElemento;
 var
   x, multa, masAntigua: tipoElemento;
   listaMulta: Lista;
@@ -98,12 +120,12 @@ begin
       if posListaMulta <> nulo then begin
         multa := punListaMulta.Recuperar(posListaMulta);
         punDataMultaMasAntigua := multa.Valor2; // asigno la primera como la mas antigua
-        masAntigua := multa;
+        masAntigua := multa; // tipoElemento multa mas antigua
         posListaMulta := punListaMulta.Siguiente(posListaMulta); // busco la siguiente
         while posListaMulta <> nulo do begin
           multa := punListaMulta.Recuperar(posListaMulta);
           punDataMulta := multa.Valor2;
-          if (compareDate(punDataMultaMasAntigua.fecha, punDataMulta.fecha) = -1) then begin
+          if (compareDate(punDataMulta.fecha, punDataMultaMasAntigua.fecha) < 0) then begin
             punDataMultaMasAntigua := punDataMulta;
             masAntigua := multa;
           end;
@@ -111,21 +133,153 @@ begin
         end;
       end;
     end;
+    p := listaAutos.siguiente(p);
   end;
   result := masAntigua;
 end;
 
+function adeudadoMultaMasReciente(patente:string; listaAutos:lista):tipoElemento;
+var
+  x, multa, masReciente: tipoElemento;
+  listaMulta: Lista;
+  p, posListaMulta: posicionLista;
+  punListaMulta: pLista;
+  noEncontrado: boolean;
+  punDataMulta, punDataMultaMasReciente: pDataMulta;
+begin
+  noEncontrado := true;
+  p := listaAutos.comienzo;
+  while (p <> nulo) and (noEncontrado) do begin
+    x := listaAutos.Recuperar(p);
+    if x.Clave = patente then begin
+      noEncontrado := False;
+      punListaMulta := x.Valor2; // lista multa
+      posListaMulta := punListaMulta.comienzo;
+      if posListaMulta <> nulo then begin
+        multa := punListaMulta.Recuperar(posListaMulta);
+        punDataMultaMasReciente := multa.Valor2; // asigno la primera como la mas antigua
+        masReciente := multa; // tipoElemento multa mas antigua
+        posListaMulta := punListaMulta.Siguiente(posListaMulta); // busco la siguiente
+        while posListaMulta <> nulo do begin
+          multa := punListaMulta.Recuperar(posListaMulta);
+          punDataMulta := multa.Valor2;
+          if (compareDate(punDataMulta.fecha, punDataMultaMasReciente.fecha) > 0) then begin
+            punDataMultaMasReciente := punDataMulta;
+            masReciente := multa;
+          end;
+          posListaMulta := punListaMulta.Siguiente(posListaMulta);
+        end;
+      end;
+    end;
+    p := listaAutos.siguiente(p);
+  end;
+  result := masReciente;
+end;
+
+function autoConMasInfracciones(listaAutos:lista):tipoElemento;
+var
+  x, autoResult: tipoElemento;
+  listaMulta: Lista;
+  p: posicionLista;
+  punListaMulta: pLista;
+  cantMultasResult, cantMultas:integer;
+begin
+  p := listaAutos.comienzo;
+  x := listaAutos.Recuperar(p);
+  punListaMulta := x.Valor2; // lista multa
+  autoResult := x;
+  cantMultasResult := punListaMulta.CantidadElementos;
+  p := listaAutos.siguiente(p);
+  while (p <> nulo) do begin
+    x := listaAutos.Recuperar(p);
+    punListaMulta := x.Valor2; // lista multa
+    cantMultas := punListaMulta.CantidadElementos;
+    if cantMultas > cantMultasResult then begin
+      cantMultasResult := cantMultas;
+      autoResult := x;
+    end;
+    p := listaAutos.siguiente(p);
+  end;
+  result := autoResult;
+end;
+
 function mostrarDatosMulta(multa:tipoElemento):string;
 var
-  strAux:string;
+  strAux,Estado:string;
   punDataMulta:pDataMulta;
 begin
   punDataMulta := multa.Valor2;
+  case punDataMulta.estado of
+    pendiente: Estado := 'Pendiente';
+    abonada: Estado := 'Abonada';
+    anulada: Estado := 'Anulada';
+  end;
   strAux :=
-    'Nº ACTA: ' + multa.Clave + sLineBreak +
+    'Nº Acta: ' + multa.ArmarString + sLineBreak +
     'Fecha: ' + datetostr(punDataMulta.fecha) + sLineBreak +
-    'Importe: '+ punDataMulta.importe ;
+    'Importe: $'+ punDataMulta.importe.ToString + sLineBreak +
+    'Estado: ' + Estado + sLineBreak +
+    '------------------------------------';
+  result := strAux;
+end;
 
+function autoConMasDeuda(listaAutos:lista):tipoElemento;
+var
+  x, autoResult: tipoElemento;
+  p: posicionLista;
+  deudaResult, deudaAuto:integer;
+begin
+  p := listaAutos.comienzo;
+  x := listaAutos.Recuperar(p);
+  autoResult := x;
+  deudaResult := totalAdeudadoAuto(x.Clave, listaAutos);
+  p := listaAutos.siguiente(p);
+  while (p <> nulo) do begin
+    x := listaAutos.Recuperar(p);
+    deudaAuto := totalAdeudadoAuto(x.Clave, listaAutos); // lista multa
+    if deudaAuto > deudaResult then begin
+      deudaResult := deudaAuto;
+      autoResult := x;
+    end;
+    p := listaAutos.siguiente(p);
+  end;
+  result := autoResult;
+end;
+
+function autoSinDeuda(listaAutos:lista):tipoElemento;
+var
+  x, autoResult: tipoElemento;
+  p: posicionLista;
+  deudaResult, deudaAuto:integer;
+begin
+  p := listaAutos.comienzo;
+  x := listaAutos.Recuperar(p);
+  autoResult := x;
+  deudaResult := totalAdeudadoAuto(x.Clave, listaAutos);
+  p := listaAutos.siguiente(p);
+  while (p <> nulo) do begin
+    x := listaAutos.Recuperar(p);
+    deudaAuto := totalAdeudadoAuto(x.Clave, listaAutos); // lista multa
+    if deudaAuto = 0 then begin
+      deudaResult := deudaAuto;
+      autoResult := x;
+    end;
+    p := listaAutos.siguiente(p);
+  end;
+  if deudaResult = 0 then result := autoResult;
+end;
+
+function mostrarDatosAuto(auto:tipoElemento):string;
+var
+  strAux:string;
+  punListaMultas:pLista;
+begin
+  punListaMultas := auto.Valor2;
+  strAux :=
+    'Patente: ' + auto.ArmarString + sLineBreak +
+    'Cantidad de multas: ' + punListaMultas.CantidadElementos.ToString+ sLineBreak +
+    '------------------------------------';
+  result := strAux;
 end;
 
 function fechaRandom(): TDate;
@@ -145,7 +299,7 @@ var
   dataMultaAux: dataMulta;
   s: integer;
 begin
-  dataMultaAux.fecha := Now;
+  dataMultaAux.fecha := fechaRandom;
   dataMultaAux.importe := random(10000);
   s := random(3);
   case s of
@@ -165,7 +319,9 @@ var
   x:tipoelemento;
   dataMultaAux: dataMulta;
   punteroDataMulta: pDataMulta;
+  cantidadMultasRandom:integer;
 begin
+  cantidadMultasRandom := random(largoListaMultas);
   dataMultaAux := dataMultaRandom; // lleno el auxiliar con random
   x.Clave := random(1000); // tipo elemento multa
   New(punteroDataMulta); // Creo un punterodatamulta al registro = valor2 de multa1
@@ -173,7 +329,7 @@ begin
   x.Valor2 := punteroDataMulta; // guardo puntero en valor 2 de la multa
   listaMulta.Agregar(x);
   posListaMulta := listaMulta.comienzo;
-  while posListaMulta < largoListaMultas do
+  while posListaMulta < cantidadMultasRandom do
   begin
     dataMultaAux := dataMultaRandom; // lleno el auxiliar con random
     x.Clave := random(1000); // tipo elemento multa
@@ -215,19 +371,86 @@ begin
   end;
 end;
 
-procedure TForm2.Button1Click(Sender: TObject);
+procedure TForm2.btnAutoMasDeudaClick(Sender: TObject);
+var
+  auto:tipoElemento;
 begin
-  crearListaAutos(listaAutos);
+  auto := autoConMasDeuda(listaAutos);
+  Memo1.Lines.Add(mostrarDatosAuto(auto));
+  Memo1.Lines.Add('Total adeudado por la patente ' + auto.ArmarString);
+  Memo1.Lines.Add('$' + totalAdeudadoAuto(auto.Clave, listaAutos).toString);
+end;
+
+procedure TForm2.btnAutoMasMultasClick(Sender: TObject);
+begin
+  Memo1.Lines.Add(mostrarDatosAuto(autoConMasInfracciones(listaAutos)));
 end;
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
   randomize;
+  crearListaAutos(listaAutos);
 end;
 
-procedure TForm2.nasheiClick(Sender: TObject);
+procedure TForm2.btnMasAntiguaClick(Sender: TObject);
 begin
-  Memo1.Lines.Add(totalAdeudado('1000', listaAutos).toString)
+  if inPatentePunto1.Text <> '' then begin
+    memo1.Lines.Clear;
+    Memo1.Lines.Add(mostrarDatosMulta(adeudadoMultaMasAntigua(inPatentePunto1.Text,listaAutos)));
+  end;
+end;
+
+procedure TForm2.btnMasRecienteClick(Sender: TObject);
+begin
+  if inPatentePunto1.Text <> '' then begin
+    memo1.Lines.Clear;
+    Memo1.Lines.Add(mostrarDatosMulta(adeudadoMultaMasReciente(inPatentePunto1.Text,listaAutos)));
+  end;
+end;
+
+procedure TForm2.btnTotalPatenteClick(Sender: TObject);
+begin
+  if inPatentePunto1.Text <> '' then begin
+    memo1.Lines.Clear;
+    Memo1.Lines.Add('Total adeudado por la patente ' + inPatentePunto1.Text);
+    Memo1.Lines.Add('$' + totalAdeudadoAuto(inPatentePunto1.Text, listaAutos).toString);
+  end;
+end;
+
+procedure TForm2.btnVerTodasMultasClick(Sender: TObject);
+var
+  x, multa: tipoElemento;
+  listaMulta: Lista;
+  p, posListaMulta: posicionLista;
+  punListaMulta: pLista;
+  total: longInt;
+  noEncontrado: boolean;
+  punDataMulta: pDataMulta;
+begin
+  p := listaAutos.comienzo;
+  while (p <> nulo) do begin
+    x := listaAutos.Recuperar(p);
+    if x.Clave = inVerTodasMultas.Text then
+    begin
+      punListaMulta := x.Valor2;
+      posListaMulta := punListaMulta.comienzo; // recorro todas las multas
+      while posListaMulta <> nulo do begin
+        multa := punListaMulta.Recuperar(posListaMulta);
+        memo2.lines.add(mostrarDatosMulta(multa));
+        posListaMulta := punListaMulta.Siguiente(posListaMulta);
+      end;
+    end;
+    p := listaAutos.siguiente(p);
+  end;
+end;
+
+procedure TForm2.Button1Click(Sender: TObject);
+var
+  auto:tipoElemento;
+begin
+  auto := autoSinDeuda(listaAutos);
+  if auto.EsTEVacio then exit;
+  Memo1.Lines.Add(mostrarDatosAuto(auto));
 end;
 
 end.
