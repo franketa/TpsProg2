@@ -7,8 +7,8 @@
     <Transaction>2022/03/19 22:29:15.000.813,=C:\Users\nahuepc\Documents\UNLu\Programacion 2\Embarcadero\Unit1.pas</Transaction>
     <Transaction>2022/04/22 17:51:56.000.370,=C:\Users\nahuepc\Documents\UNLu\Programacion 2\Embarcadero\Unit1.pas</Transaction>
     <Transaction>2022/04/22 17:52:23.000.958,C:\Users\nahuepc\Documents\UNLu\Programacion 2\Embarcadero\tp3_proyect.dproj=C:\Users\nahuepc\Documents\UNLu\Programacion 2\Embarcadero\Project1.dproj</Transaction>
-    <Transaction>2022/04/22 17:52:57.000.599,=C:\Users\nahuepc\Documents\UNLu\Programacion 2\Tipos.pas</Transaction>
     <Transaction>2022/04/22 17:52:57.000.332,=C:\Users\nahuepc\Documents\UNLu\Programacion 2\ListArray.pas</Transaction>
+    <Transaction>2022/04/22 17:52:57.000.599,=C:\Users\nahuepc\Documents\UNLu\Programacion 2\Tipos.pas</Transaction>
     <Transaction>2022/04/22 17:52:57.000.463,=C:\Users\nahuepc\Documents\UNLu\Programacion 2\ListPointer.pas</Transaction>
     <Transaction>2022/04/22 17:53:49.000.048,C:\Users\nahuepc\Documents\UNLu\Programacion 2\2022\tp1 git\TpsProg2\tp3\Unit1.pas=C:\Users\nahuepc\Documents\UNLu\Programacion 2\Embarcadero\Unit1.pas</Transaction>
     <Transaction>2022/04/22 17:53:49.000.048,C:\Users\nahuepc\Documents\UNLu\Programacion 2\2022\tp1 git\TpsProg2\tp3\Unit1.dfm=C:\Users\nahuepc\Documents\UNLu\Programacion 2\Embarcadero\Unit1.dfm</Transaction>
@@ -21,5 +21,9 @@
     <Transaction>2022/04/23 15:48:23.000.664,C:\Users\marti\Desktop\UNIV\prog2\TpsProg2\tp3\Unit2.dfm=C:\Users\marti\Desktop\UNIV\prog2\TpsProg2\tp3\Unit7.dfm</Transaction>
     <Transaction>2022/04/23 15:53:36.000.577,C:\Users\marti\Desktop\UNIV\prog2\TpsProg2\tp3\Unit7.dfm=C:\Users\marti\Desktop\UNIV\prog2\TpsProg2\tp3\ej7.dfm</Transaction>
     <Transaction>2022/04/23 15:53:36.000.577,C:\Users\marti\Desktop\UNIV\prog2\TpsProg2\tp3\Unit7.pas=C:\Users\marti\Desktop\UNIV\prog2\TpsProg2\tp3\ej7.pas</Transaction>
+    <Transaction>2022/04/27 19:59:02.721,C:\Users\nahuepc\Documents\UNLu\Programacion 2\2022\tp1 git\TpsProg2\tp3\Unit1.pas=</Transaction>
+    <Transaction>2022/04/27 19:59:35.351,=C:\Users\nahuepc\Documents\UNLu\Programacion 2\2022\tp1 git\TpsProg2\tp3\Unit3.pas</Transaction>
+    <Transaction>2022/04/27 19:59:43.854,C:\Users\nahuepc\Documents\UNLu\Programacion 2\2022\tp1 git\TpsProg2\tp3\ej8.pas=C:\Users\nahuepc\Documents\UNLu\Programacion 2\2022\tp1 git\TpsProg2\tp3\Unit3.pas</Transaction>
+    <Transaction>2022/04/27 19:59:43.854,C:\Users\nahuepc\Documents\UNLu\Programacion 2\2022\tp1 git\TpsProg2\tp3\ej8.dfm=C:\Users\nahuepc\Documents\UNLu\Programacion 2\2022\tp1 git\TpsProg2\tp3\Unit3.dfm</Transaction>
   </Transactions>
 </BorlandProject>
